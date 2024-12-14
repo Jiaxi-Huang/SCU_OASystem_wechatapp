@@ -1,0 +1,12 @@
+<view wx:if="{{!isHide}}">
+    <view wx:if="{{canIUse}}" >
+        <view class='header'>
+            <image src='/images/working.gif' class='iconWx'></image>
+        </view>
+        <view class='content'>
+            <view>已经绑定了的用户会直接进入主页面</view>
+            <text>没有绑定的用户，会将手机号与数据库里面的已有项匹配，如果存在，则将微信openid与phone所在行所绑定</text>
+        </view>
+        <button class='bottom' type='primary' open-type="getPhoneNumber" bindgetphonenumber="bindGetPhoneNumber">授权登录</button>
+    </view>
+</view>

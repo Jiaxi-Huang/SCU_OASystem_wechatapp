@@ -1,0 +1,28 @@
+<view>
+  <button bindtap="getList">查询</button>
+</view>
+<view class="container">
+	<scroll-view class="container-body" scroll-top="{{scrolltop}}" bindscroll="scrollHandle" lower-threshold="50" bindscrolltolower="scrollLoading">
+		<view class="service-list">
+    <navigator class="service-item" wx:for="{{todoList}}" wx:key="{{todoList.id}}" url="">
+			<view class="service-img">
+				<image src="http://img.mukewang.com/57fdecf80001fb0406000338-240-135.jpg" mode="aspectFill"></image>
+			</view>
+			<view class="service-text">
+				<view class="service-tite">{{item.object_id}}</view>
+				<view class="service-tags">
+					<text>{{item.receiver_type}}</text>
+				</view>
+        <view class="service-tags">
+					<text bindtap="onModifyRecord" data-itemId="{{item.id}}" data-receiverType="{{item.receiver_type}}" data-objectId="{{item.object_id}}">修改</text><text bindtap="onDeleteRecord" data-itemId="{{item.id}}">删除</text>
+				</view>
+				<text class="service-city">发送结果：{{item.send_result}}</text>
+			</view>
+    </navigator>
+		</view>
+    <view class="gototop {{scrolltop>200? 'active':''}}" bindtap="goToTop"></view>
+</scroll-view>
+<view class="btn-submit">
+  <button class="btn-block btn-orange" bindtap="onAddRecord">添加</button>
+</view>
+</view>
