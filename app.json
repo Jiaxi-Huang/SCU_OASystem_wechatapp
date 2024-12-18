@@ -26,7 +26,7 @@
     "pages/map/map_menu",
     "pages/map/map_monitor",
     "pages/map/map_test",
-    "pages/todo/todo_add"
+    "pages/todo/todo"
   ],
   "window": {
     "backgroundTextStyle": "dark",
