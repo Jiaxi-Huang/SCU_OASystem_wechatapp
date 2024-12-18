@@ -26,14 +26,10 @@
     "pages/map/map_menu",
     "pages/map/map_monitor",
     "pages/map/map_test",
-<<<<<<< HEAD
     "pages/todo/todo",
     "pages/todo/todo_add",
     "pages/todo/todo_modify",
     "pages/meeting/meeting"
-=======
-    "pages/todo/todo"
->>>>>>> e59f2e094b4190aca0eb4b3151fe30e01fe2ea01
   ],
   "window": {
     "backgroundTextStyle": "dark",

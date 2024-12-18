@@ -1,10 +1,6 @@
 {
-<<<<<<< HEAD
   "navigationBarTitleText": "服务集市",
   "backgroundColor": "#fff",
   "backgroundTextStyle": "dark",
   "enablePullDownRefresh": true
-=======
-  "usingComponents": {}
->>>>>>> e59f2e094b4190aca0eb4b3151fe30e01fe2ea01
 }

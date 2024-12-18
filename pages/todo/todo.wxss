@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-/* pages/todo/todo.wxss */
+/* pages/todo/todo_list.wxss */
 .service-list{
 	padding: 0 20rpx;
 }
@@ -46,6 +45,3 @@
 .service-city{
 	color: #666;
 }
-=======
-/* pages/todo/todo_add.wxss */
->>>>>>> e59f2e094b4190aca0eb4b3151fe30e01fe2ea01

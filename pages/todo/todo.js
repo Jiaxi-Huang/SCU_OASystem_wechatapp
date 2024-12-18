@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Page({
   data: {
     showsearch:false,   //显示搜索按钮
@@ -365,7 +364,7 @@ Page({
     var device_type = e.target.dataset.device_type;
     var device_id = e.target.dataset.device_id;
     var gps_time = e.target.dataset.gps_time;
-    let that = this;
+    console.log("aaa");
     var record = JSON.stringify({
       "id":id,
       "device_type":device_type,
@@ -406,71 +405,5 @@ Page({
     wx.navigateTo({
       url: 'todo_add',
     });
-=======
-// pages/todo/todo_add.js
-Page({
-
-  /**
-   * 页面的初始数据
-   */
-  data: {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
->>>>>>> e59f2e094b4190aca0eb4b3151fe30e01fe2ea01
   }
 })
