@@ -61,6 +61,16 @@ Page({
           'text':'设备管理',
           'url':'device'
         },
+        {
+          'icon':'./../../images/icon_13.png',
+          'text':'待办事项',
+          'url':'todo'
+        },
+        {
+          'icon':'./../../images/icon_05.png',
+          'text':'会议',
+          'url':'meeting'
+        },
       ],
       imgUrls: [
         '../../images/working.gif'
@@ -70,7 +80,7 @@ Page({
   changeRoute:function(url){
     wx.navigateTo({
       url: `../${url}/${url}`
-    })
+    });
   },
   onReady:function(){
     //生命周期函数--监听页面初次渲染完成

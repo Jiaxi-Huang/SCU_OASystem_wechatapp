@@ -1,0 +1,30 @@
+<view class="container container-gray">
+	<view class="group">
+		<view class="group-header">基本信息</view>
+		<view class="group-body">
+			<view class="input-list">
+				<view class="input-item">
+					<text class="input-item-label">设备类型</text>
+					<view class="input-item-content">
+						<input type="text" value="{{type}}" bindinput="inputType"></input>
+					</view>
+				</view>
+        <view class="input-item">
+					<text class="input-item-label">设备ID</text>
+					<view class="input-item-content">
+						<input type="text" value="{{de_id}}" bindinput="inputDeId"></input>
+					</view>
+				</view>
+        <view class="input-item">
+					<text class="input-item-label">GPS时间</text>
+					<view class="input-item-content">
+						<input type="text" value="{{time}}" bindinput="inputGps"></input>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+	<view class="btn-submit">
+		<button class="btn-block btn-orange" bindtap="applySubmit">提交</button>
+	</view>
+</view>

@@ -25,7 +25,11 @@
     "pages/map/map_location",
     "pages/map/map_menu",
     "pages/map/map_monitor",
-    "pages/map/map_test"
+    "pages/map/map_test",
+    "pages/todo/todo",
+    "pages/todo/todo_add",
+    "pages/todo/todo_modify",
+    "pages/meeting/meeting"
   ],
   "window": {
     "backgroundTextStyle": "dark",
