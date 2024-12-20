@@ -16,11 +16,12 @@ Page({
     servicelist:[], //服务集市列表
     scrolltop:null, //滚动位置
     page: 0,  //分页
-    gpslist:[],
+    todo_list:[],
   },
   onLoad: function () { //加载数据渲染页面
     this.fetchServiceData();
     this.fetchFilterData();
+    // console.log("getTodoRecord");
     this.getTodoRecord();
   },
   fetchFilterData:function(){ //获取筛选条件
@@ -337,59 +338,64 @@ Page({
   getTodoRecord:function() {
     let that = this;
     console.log("执行到getTodoRecord了");
-    wx.request({
-      url: 'http://localhost:8890/WeChatDemo_war_exploded/device_file_servlet_action?action=get_device_record',
-      data:{},
-      success:function(res) {
-        that.handleGetTodoResult(res);
+    wx.getStorage({
+      key: 'accessToken', 
+      success: function(res) {
+        // res.data 包含了存储的accessToken
+        console.log('从Storage中获取到的accessToken:', res.data);
+        const accessToken = res.data;
+        console.log(accessToken);
+        wx.request({
+          url: 'http://localhost:8080/api/todolist/getRec',
+          data:{accessToken: 1},
+          method: 'POST',
+          success:function(res) {
+            console.log("records get!");
+            that.handleGetTodoResult(res);
+          },
+          fail:function(res) {
+              
+          }
+        })
       },
-      fail:function(res) {
-
+      fail: function(err) {
+        // 如果获取失败，这里会执行
+        console.error('获取accessToken失败:', err);
       }
-    })
+    });
   },
   handleGetTodoResult:function(res) {
     console.log("执行到handleGetTodoResult了");
-    console.log(JSON, res);
-    for(var i = 0; i < res.data.aaData.length; ++i) {
-      res.data.aaData[i].img_url="http://img.mukewang.com/57fdecf80001fb0406000338-240-135.jpg";
-    }
-    this.setData({
-      gpslist:res.data.aaData,
+    let that = this;
+    // 使用 setData 更新 todo_list 并确保图片路径正确
+    that.setData({
+      todo_list: res.data.data.map(item => {
+          item.url = item.todo_fin === "已完成" ? "/images/radiofill.png" : "/images/radio.png";
+          return item;
+      })
+    }, () => {
+        // console.log(that.data.todo_list);  // 打印更新后的 todo_list
     });
-    
   },
   onModifyRecord:function (e)  { //e is "event"
-    var id = e.target.dataset.id;
-    var device_type = e.target.dataset.device_type;
-    var device_id = e.target.dataset.device_id;
-    var gps_time = e.target.dataset.gps_time;
-    console.log("aaa");
-    var record = JSON.stringify({
-      "id":id,
-      "device_type":device_type,
-      "device_id":device_id,
-      "gps_time":gps_time,
-    });
+    var record = JSON.stringify(e.target.dataset.record);
     wx.navigateTo({
       url: 'todo_modify?record=' + record,
     });
   },
   onDeleteRecord:function (e) {
-    var id = e.target.dataset.id;
-    var device_id = e.target.dataset.deviceid;
-    console.log("执行到onDeleteRecord了, 删除：");
-    console.log(id);
+    var todo_id = e.target.dataset.todo_id;
     wx.showModal({
       cancelColor: "cancelColor",
       title: '提示',
-      content: '确认要删除ID '+ id + '的记录吗',
+      content: '确认要删除ID '+ todo_id + '的记录吗',
       complete: (res) => {
         if (res.confirm) {
           let that = this;
           wx.request({
-            url: 'http://localhost:8890/WeChatDemo_war_exploded/device_file_servlet_action?action=delete_device_record',
-            data:{"id":id},
+          url: 'http://localhost:8080/api/todolist/deleteTodo',
+            method: 'POST',
+            data:{"todo_id":todo_id},
             success:function(res) {
               that.getTodoRecord();
             },
@@ -398,6 +404,22 @@ Page({
             }
           })
        }
+      }
+    })
+  },
+  onStatusChange:function (e) {
+    var record = e.target.dataset.record;
+    record.todo_fin = record.todo_fin === '未完成' ? '已完成' : '未完成';
+    let that = this;
+    wx.request({
+      url: 'http://localhost:8080/api/todolist/modifyRec',
+      method: 'POST',
+      data: record,
+      success:function(res) {
+        that.getTodoRecord();
+      },
+      fail:function(res) {
+        console.log("Modify失败");
       }
     })
   },

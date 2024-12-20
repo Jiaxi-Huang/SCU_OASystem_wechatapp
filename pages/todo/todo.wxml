@@ -7,6 +7,7 @@
 		</view>
 		<button class="search-extra-btn">服务商入驻</button>
 	</view>
+
 	<view class="filter-flex">
 		<view class="filter-tab">
 			<text bindtap="setFilterPanel" data-findex="1" class="{{showfilterindex==1?'active':''}}">服务类别</text>
@@ -36,20 +37,20 @@
 
 	<scroll-view class="container-body" scroll-y="true" scroll-top="{{scrolltop}}" bindscroll="scrollHandle" lower-threshold="50" bindscrolltolower="scrollLoading" >
 		<view class="service-list">
-			<navigator class="service-item" wx:for="{{gpslist}}" wx:key="{{item.id}}" url="http://img.mukewang.com/57fdecf80001fb0406000338-240-135.jpg">
+			<navigator class="service-item" wx:for="{{todo_list}}" wx:key="{{item.todo_id}}">
 				<view class="service-img">
-					<image src="{{item.img_url}}" mode="aspectFill"></image>
+					<image src="{{item.url}}" mode="objectFill" 
+          bindtap="onStatusChange" data-record="{{item}}"></image>
 				</view>
-        <!-- data-id="{{item.id}}" data-deviceid="{{item.data_deviceid}}" bindtap="onBarTap" -->
 				<view class="service-text" >
-					<view class="service-tite">{{item.device_type}}</view>
+					<view class="service-tite">{{item.todo_title}}</view>
 					<view class="service-tags">
-						<text>GPS设备ID：{{item.device_id}}</text>
+						<text>待办事项ID：{{item.todo_id}}</text>
 					</view>
-					<text class="service-city">GPS时间：{{item.gps_time}}</text>
+					<text class="service-city">截止时间：{{item.todo_ddl}}</text>
           <view class="service-tags">
-						<text bindtap="onDeleteRecord" data-id="{{item.id}}">删除</text> 
-            <text bindtap="onModifyRecord" data-id="{{item.id}}" data-device_type = "{{item.device_type}}" data-gps_time="{{item.gps_time}}" data-device_id="{{item.device_id}}">修改</text>
+						<text bindtap="onDeleteRecord" data-todo_id="{{item.todo_id}}">删除</text> 
+            <text bindtap="onModifyRecord" data-record="{{item}}">修改</text>
 					</view>
 				</view>
 			</navigator>
@@ -57,7 +58,7 @@
 		<view class="gototop {{scrolltop>200?'active':''}}" bindtap="goToTop"></view>
 	</scroll-view>
   <view class="btn-submit">
-		<button class="btn-block btn-orange" bindtap="onAddRecord">新增GPS记录</button>
+		<button class="btn-block btn-orange" bindtap="onAddRecord">新增待办事项</button>
 	</view>
 </view>
 

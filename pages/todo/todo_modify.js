@@ -8,21 +8,24 @@ Page({
     jobindex:0,
     hasfinancing: false,  //是否已融资
     isorg: false,  //是否是机构
-    id:"",
-    type:"",
-    time:"",
-    de_id:"",
+    record: {},
   },
   onLoad: function () {
-    this.fetchData()
-    console.log(this.options.record);
-    var record = JSON.parse(this.options.record);
-    this.setData({
-      id:record.id,
-      type:record.device_type,
-      time:record.gps_time,
-      de_id:record.device_id,
-    });
+    var record;
+    if (this.options.record) {
+      try {
+        record = JSON.parse(this.options.record);
+        this.setData({
+          record: record
+        }, () => {
+          console.log('modify的 record:', this.data.record); 
+        });
+      } catch (error) {
+        console.error('modify JSON 解析失败:', error);
+      }
+    } else {
+      console.error('modify 没有提供有效的 record 参数');
+    }
   },
   fetchData: function(){
     this.setData({
@@ -67,27 +70,23 @@ Page({
   },
   applySubmit:function(){
     let that = this;
-    console.log(that.data.id);
-    console.log(that.data.type);
-    console.log(that.data.time);
-    console.log(that.data.de_id);
+    let record = that.data.record;
+    delete record.url;
+    console.log("上传的todo record");
+    console.log(record);
     wx.showModal({
       cancelColor: "cancelColor",
       title: '提示',
-      content: '确认要修改ID '+ that.data.id + '的记录吗',
+      content: '确认要修改该记录吗',
       complete: (res) => {
         if (res.confirm) {
           wx.request({
-            url: 'http://localhost:8890/WeChatDemo_war_exploded/device_file_servlet_action?action=modify_device_record',
-            data:{
-              "id":that.data.id,
-              "device_id":that.data.de_id,
-              "device_type":that.data.type,
-              "gps_time":that.data.time,
-            },
+            url: 'http://localhost:8080/api/todolist/modifyRec',
+            method: 'POST',
+            data: record,
             success:function(res) {
               wx.navigateTo({
-                url: 'todo_list'
+                url: 'todo'
               });
             },
             fail:function(res) {
@@ -98,19 +97,11 @@ Page({
       }
     })
   },
-  inputType:function (e) {
+  inputChange: function (e) {
+    const field = e.target.dataset.field;  
+    const value = e.detail.value;
     this.setData({
-      type:e.detail.value
-    });
-  },
-  inputDeId:function (e) {
-    this.setData({
-      de_id:e.detail.value
-    });
-  },
-  inputGps:function (e) {
-    this.setData({
-      time:e.detail.time
+      [`record.${field}`]: value
     });
   },
   

@@ -4,6 +4,10 @@
     "pages/index/index",
     "pages/space/space",
     "pages/logs/logs",
+    "pages/todo/todo",
+    "pages/todo/todo_add",
+    "pages/todo/todo_modify",
+    "pages/meeting/meeting",
     "pages/spacereserve/spacereserve",
     "pages/service/service",
     "pages/servicedetail/servicedetail",
@@ -25,11 +29,7 @@
     "pages/map/map_location",
     "pages/map/map_menu",
     "pages/map/map_monitor",
-    "pages/map/map_test",
-    "pages/todo/todo",
-    "pages/todo/todo_add",
-    "pages/todo/todo_modify",
-    "pages/meeting/meeting"
+    "pages/map/map_test"
   ],
   "window": {
     "backgroundTextStyle": "dark",
