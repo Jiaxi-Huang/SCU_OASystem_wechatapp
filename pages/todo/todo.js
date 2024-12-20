@@ -341,13 +341,10 @@ Page({
     wx.getStorage({
       key: 'accessToken', 
       success: function(res) {
-        // res.data 包含了存储的accessToken
-        console.log('从Storage中获取到的accessToken:', res.data);
         const accessToken = res.data;
-        console.log(accessToken);
         wx.request({
           url: 'http://localhost:8080/api/todolist/getRec',
-          data:{accessToken: 1},
+          data:{accessToken: accessToken},
           method: 'POST',
           success:function(res) {
             console.log("records get!");
