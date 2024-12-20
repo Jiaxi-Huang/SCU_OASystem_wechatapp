@@ -55,9 +55,20 @@ Page({
                                           },
                                           success: res=>{
                                             if(res.data.status === 0){
-                                            wx.switchTab({
-                                              url: '../index/index',
-                                            })
+                                              wx.setStorage({
+                                                key: 'accessToken',  // 设置存储的key名称
+                                                data: res.data.data.accessToken,   // 需要存储的数据
+                                                success: () => {
+                                                  console.log('accessToken 已成功存储');
+                                                  // 切换到主页
+                                                  wx.switchTab({
+                                                    url: '../index/index',
+                                                  });
+                                                },
+                                                fail: () => {
+                                                  console.error('accessToken 存储失败');
+                                                }
+                                              })                                          
                                             }
                                             else{
                                               wx.showToast({
