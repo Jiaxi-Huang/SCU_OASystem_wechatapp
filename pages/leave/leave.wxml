@@ -1,0 +1,40 @@
+<view class="container">
+	<view class="search-flex {{scrolltop>200?'tophide':''}}">
+		<view class="search-bar">
+			<input type="text" maxlength="12" placeholder="请输入关键字查询" bindinput="inputSearch"></input>
+			<button class="search-btn" bindtap="submitSearch" wx:if="{{showsearch}}">搜索</button>
+		</view>
+		<button class="search-extra-btn" bindtap="addLeave">请假申请</button>
+	</view>
+    <view>
+        <button class=".btn-orange" bindtap="showMyLeave">我的请假</button>
+        <button class=".btn-orange" bindtap="showReviewLeave">我处理的请假</button>
+        <button class=".btn-orange" bindtap="showNotifyLeave">抄送我的请假</button>
+        <button class=".btn-orange" bindtap="showAdminLeave" wx:if="{{isAdmin}}">所有请假</button>
+    </view>
+	<scroll-view class="container-body" scroll-y="true" scroll-top="{{scrolltop}}" bindscroll="scrollHan dle" lower-threshold="50" bindscrolltolower="scrollLoading">
+		<view class="leave-list">
+			<navigator class="leave-item" wx:for="{{tableData}}" wx:key="{{item.leave_id}}" url="leaveModify?id={{item.leave_id}}">
+				<view class="leave-text">
+					<view class="leave-tite">{{item.leave_reason}}</view>
+					<view class="leave-tags">
+						<text>{{item.leave_type}}</text>
+					</view>
+                    <view class="leave-tags">
+						<text>{{item.leave_status}}</text>
+					</view>
+                    <view>
+					<text class="leave-city">提交用户ID：{{item.leave_user_id}}</text>
+					</view>
+                    <view>
+					<text class="leave-city">开始时间：{{item.leave_start_time}}</text>
+					</view>
+                    <view>
+                    <text class="leave-city">结束时间：{{item.leave_end_time}}</text>
+                    </view>
+                </view>
+			</navigator>
+		</view>
+		<view class="gototop {{scrolltop>200?'active':''}}" bindtap="goToTop"></view>
+	</scroll-view>
+</view>

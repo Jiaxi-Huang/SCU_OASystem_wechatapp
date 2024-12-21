@@ -26,10 +26,13 @@
     "pages/device/list",
     "pages/device/modify",
     "pages/device/delete",
+    "pages/leave/leave",
+    "pages/reimbursement/reimbursement",
     "pages/map/map_location",
     "pages/map/map_menu",
     "pages/map/map_monitor",
-    "pages/map/map_test"
+    "pages/map/map_test",
+    "pages/leave/leaveAdd"
   ],
   "window": {
     "backgroundTextStyle": "dark",
