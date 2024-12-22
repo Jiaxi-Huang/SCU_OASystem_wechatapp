@@ -1,0 +1,63 @@
+<view class="container">
+	<view class="search-flex {{scrolltop>200?'tophide':''}}">
+		<view class="search-bar">
+			<input type="text" maxlength="12" placeholder="请输入关键字查询" bindinput="inputSearch"></input>
+			<button class="search-btn" bindtap="submitSearch">搜索</button>
+		</view>
+	</view>
+	<view class="filter-flex">
+		<view class="filter-tab">
+			<text bindtap="setFilterPanel" data-findex="1" class="{{showfilterindex==1?'active':''}}">所在部门</text>
+			<text bindtap="setFilterPanel" data-findex="2" class="{{showfilterindex==2?'active':''}}">所属职位</text>
+		</view>
+		<view class="filter-content" wx:if="{{showfilter}}">
+			<view class="filter-panel" wx:if="{{showfilterindex==1}}">
+				<view class="filter-panel-left">
+					<view wx:for="{{filterchoice.departments}}" data-value="{{item}}" bindtap="selectFilter">{{item}}</view>
+				</view>
+			</view>
+			<view class="filter-panel" wx:if="{{showfilterindex==2}}">
+				<view class="filter-panel-right">
+					<view wx:for="{{filterchoice.roles}}" data-value="{{item}}" bindtap="selectFilter">{{item}}</view>
+				</view>
+			</view>
+		</view>
+		<view class="filter-shadow" wx:if="{{showfilter}}" bindtap="hideFilter"></view>
+	</view>
+	<scroll-view class="container-body" scroll-y="true" scroll-top="{{scrolltop}}" bindscroll="scrollHandle" lower-threshold="50" bindscrolltolower="scrollLoading">
+		<view class="service-list">
+			<!-- 如果 isFiltered 为真则显示 filterlist，否则显示 userlist -->
+      <block wx:if="{{isFiltered}}">
+        <navigator class="service-item" wx:for="{{filterlist}}" wx:key="{{item.userId}}" url="../user/user_modify?id={{item.userId}}">
+          <view class="service-img">
+            <image src="{{item.userAvatar}}" mode="aspectFill"></image>
+          </view>
+          <view class="service-text">
+            <view class="service-tite">{{item.userName}}</view>
+            <view class="service-tags">
+              <text>{{item.userRole}}</text>
+              <text>{{item.userDepartment}}</text>
+            </view>
+            <text class="service-city">电话号码：{{item.userPhone}}</text>
+          </view>
+        </navigator>
+      </block>
+      <block wx:else>
+        <navigator class="service-item" wx:for="{{userlist}}" wx:key="{{item.userId}}" url="../user/user_modify?id={{item.userId}}">
+          <view class="service-img">
+            <image src="{{item.userAvatar}}" mode="aspectFill"></image>
+          </view>
+          <view class="service-text">
+            <view class="service-tite">{{item.userName}}</view>
+            <view class="service-tags">
+              <text>{{item.userRole}}</text>
+              <text>{{item.userDepartment}}</text>
+            </view>
+            <text class="service-city">电话号码：{{item.userPhone}}</text>
+          </view>
+        </navigator>
+      </block>
+    </view>
+		<view class="gototop {{scrolltop>200?'active':''}}" bindtap="goToTop"></view>
+	</scroll-view>
+</view>

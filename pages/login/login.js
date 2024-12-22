@@ -128,24 +128,52 @@ Page({
         },
         success: res=>{
           if(res.data.status === 0){
-          wx.switchTab({
-            url: '../index/index',
-          })
-          }
-          else{
+            wx.request({
+              url:'http://localhost:8080/api/auth/wechat/login',
+              method:"POST",
+              data:{
+                openid:that.data.openid
+              },
+              success: res=>{
+                if(res.data.status === 0){
+                  wx.setStorage({
+                    key: 'accessToken',  // 设置存储的key名称
+                    data: res.data.data.accessToken,   // 需要存储的数据
+                    success: () => {
+                      console.log('accessToken 已成功存储');
+                      // 切换到主页
+                      wx.switchTab({
+                        url: '../index/index',
+                      });
+                    },
+                    fail: () => {
+                      console.error('accessToken 存储失败');
+                    }
+                  })                                          
+                }
+                else{
+                  wx.showToast({
+                    title: res.data.message,
+                    icon:'error'
+                  })
+                }
+              },
+              fail : res=>{
+                wx.showToast({
+                  title: res.data.message,
+                  icon:'error'
+                })
+              }
+            });
+            }
+          },
+          fail : res=>{
             wx.showToast({
               title: res.data.message,
               icon:'error'
             })
           }
-        },
-        fail : res=>{
-          wx.showToast({
-            title: res.data.message,
-            icon:'error'
-          })
-        }
-      });
-    }
-    
-})
+        })
+      }
+
+});

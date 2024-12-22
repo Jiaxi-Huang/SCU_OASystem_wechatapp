@@ -52,6 +52,16 @@ Page({
           'url':'property'
         },
         {
+          'icon':'./../../images/icon_03.png',
+          'text':'人事管理',
+          'url':'user'
+        },
+        {
+          'icon':'./../../images/icon_03.png',
+          'text':'员工管理',
+          'url':'worker'
+        },
+        {
           'icon':'./../../images/icon_13.png',
           'text':'入驻申请',
           'url':'apply'
