@@ -67,7 +67,7 @@ Page({
           'url':'apply'
         },
         {
-          'icon':'./../../images/icon_26.png',
+          'icon':'./../../images/icon_25.png',
           'text':'设备管理',
           'url':'device'
         },
@@ -80,6 +80,16 @@ Page({
           'icon':'./../../images/icon_05.png',
           'text':'会议',
           'url':'meeting'
+        },
+        {
+          'icon':'./../../images/icon_03.png',
+          'text':'报销',
+          'url':'reimbursement'
+        },
+        {
+          'icon':'./../../images/icon_27.png',
+          'text':'请假',
+          'url':'leave'
         },
       ],
       imgUrls: [
