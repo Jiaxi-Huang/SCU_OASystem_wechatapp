@@ -25,6 +25,7 @@
     "pages/activity/activity",
     "pages/activitydetail/activitydetail",
     "pages/my/my",
+    "pages/my/my_modify",
     "pages/myconferencelist/myconferencelist",
     "pages/device/device",
     "pages/device/add",
@@ -67,7 +68,7 @@
       },
       {
         "pagePath": "pages/my/my",
-        "text": "我发起的",
+        "text": "个人页",
         "iconPath": "images/yonghu.png",
         "selectedIconPath": "images/yonghufill.png"
       }

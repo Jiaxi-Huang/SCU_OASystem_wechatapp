@@ -3,9 +3,8 @@ Page({
     isFiltered:false,
     searchtext:'',  //搜索文字
     filterlist:[],  //筛选条件数据
-    filterchoice:{departments: [], roles: []},//显示筛选条件项
+    filterchoice:{roles: []},//显示筛选条件项
     currentFilters: { // 当前应用的筛选条件
-      department: '',
       role: ''
     },
     showfilter:false, //是否显示下拉筛选
@@ -81,18 +80,12 @@ Page({
   },
   //获取筛选数据
   fetchFilterData: function() {
-    const uniqueDepartments = this.getUniqueDepartments();
     const uniqueRoles = this.getUniqueRoles();
     this.setData({
-      'filterchoice.departments': uniqueDepartments,
       'filterchoice.roles': uniqueRoles
     });
     console.log("查询筛选项成功")
   },
-  getUniqueDepartments: function() {
-    return ["全部", ...new Set(this.data.userlist.map(item => item.userDepartment))];
-  },
-
   getUniqueRoles: function() {
     return ["全部", ...new Set(this.data.userlist.map(item => item.userRole))];
   },
@@ -116,7 +109,7 @@ Page({
   selectFilter: function(e) {
     const data = e.currentTarget.dataset;
     const filterIndex = this.data.showfilterindex;
-    const filterKey = (filterIndex== 1 ? 'department' : 'role');
+    const filterKey = (filterIndex== 1 ?'role':'');
     const newValue = (data.value == '全部' ? '' : data.value);
     this.setData({
       [`currentFilters.${filterKey}`]: newValue
@@ -130,13 +123,12 @@ Page({
   },
   //搜索筛选项
   applyFilters: function() {
-    const { department, role } = this.data.currentFilters;
+    const {role } = this.data.currentFilters;
     var filteredList=this.data.userlist;
-    if(department || role){
+    if(role){
       filteredList = filteredList.filter(item => {
-        const matchesDepartment = !department || item.userDepartment.toLowerCase().includes(department.toLowerCase());
         const matchesRole = !role || item.userRole.toLowerCase().includes(role.toLowerCase());
-        return matchesDepartment && matchesRole;
+        return matchesRole;
       });
       this.setData({
         filterlist: filteredList,

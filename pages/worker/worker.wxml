@@ -7,16 +7,10 @@
 	</view>
 	<view class="filter-flex">
 		<view class="filter-tab">
-			<text bindtap="setFilterPanel" data-findex="1" class="{{showfilterindex==1?'active':''}}">所在部门</text>
-			<text bindtap="setFilterPanel" data-findex="2" class="{{showfilterindex==2?'active':''}}">所属职位</text>
+			<text bindtap="setFilterPanel" data-findex="1" class="{{showfilterindex==1?'active':''}}">所属职位</text>
 		</view>
 		<view class="filter-content" wx:if="{{showfilter}}">
 			<view class="filter-panel" wx:if="{{showfilterindex==1}}">
-				<view class="filter-panel-left">
-					<view wx:for="{{filterchoice.departments}}" data-value="{{item}}" bindtap="selectFilter">{{item}}</view>
-				</view>
-			</view>
-			<view class="filter-panel" wx:if="{{showfilterindex==2}}">
 				<view class="filter-panel-right">
 					<view wx:for="{{filterchoice.roles}}" data-value="{{item}}" bindtap="selectFilter">{{item}}</view>
 				</view>

@@ -1,24 +1,39 @@
 <view class="container">
-	<view class="my-list">
-		<navigator class="my-item" url="../myconferencelist/myconferencelist">
-			<image src="../../images/icon_24.png" mode="aspectFit"></image>
-			<text>入驻申请</text>
-		</navigator>
-		<navigator class="my-item" url="../myconferencelist/myconferencelist">
-			<image src="../../images/icon_26.png" mode="aspectFit"></image>
-			<text>物业服务</text>
-		</navigator>
-		<navigator class="my-item" url="../myconferencelist/myconferencelist">
-			<image src="../../images/icon_28.png" mode="aspectFit"></image>
-			<text>会议室预订</text>
-		</navigator>
-		<navigator class="my-item" url="../myconferencelist/myconferencelist">
-			<image src="../../images/icon_30.png" mode="aspectFit"></image>
-			<text>问题反馈</text>
-		</navigator>
-		<navigator class="my-item" url="../myconferencelist/myconferencelist">
-			<image src="../../images/icon_32.png" mode="aspectFit"></image>
-			<text>云资源申请</text>
-		</navigator>
-	</view>
+  <view class="user-info">
+    <!-- 用户头像 -->
+    <image class="avatar" src="{{userAvatar}}" mode="aspectFit"></image>
+    <!-- 用户名 -->
+    <view class="info-item">
+      <text>用户名:</text>
+      <text>{{userName}}</text>
+    </view>
+    <!-- 部门 -->
+    <view class="info-item">
+      <text>部门:</text>
+      <text>{{userDepartment}}</text>
+    </view>
+    <!-- 角色 -->
+    <view class="info-item">
+      <text>角色:</text>
+      <text>{{userRole}}</text>
+    </view>
+    <!-- 邮箱 -->
+    <view class="info-item">
+      <text>邮箱:</text>
+      <text>{{userEmail}}</text>
+    </view>
+    <!-- 手机号 -->
+    <view class="info-item">
+      <text>手机号:</text>
+      <text>{{userPhone}}</text>
+    </view>
+    <!-- 个人简介 -->
+    <view class="info-item">
+      <text>个人简介:</text>
+      <text>{{userIntro}}</text>
+    </view>
+  </view>
+  <view>
+    <button class="edit-btn" bindtap="navigateToModifyPage">修改个人信息</button>
+  </view>
 </view>

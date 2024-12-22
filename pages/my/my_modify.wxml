@@ -1,0 +1,14 @@
+<!-- user_modify.wxml -->
+<view class="form-container">
+  <form bindsubmit="formSubmit">
+    <view class="form-item">
+      <text>用户名:</text>
+      <input name="username" value="{{username}}" placeholder="请输入用户名"/>
+    </view>
+    <view class="form-item">
+      <text>个人简介:</text>
+      <textarea name="intro" value="{{intro}}" placeholder="请输入个人简介"></textarea>
+    </view>
+    <button class="submit-btn" formType="submit">保存更改</button>
+  </form>
+</view>
