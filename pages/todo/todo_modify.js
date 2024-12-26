@@ -85,9 +85,9 @@ Page({
             method: 'POST',
             data: record,
             success:function(res) {
-              wx.navigateTo({
-                url: 'todo'
-              });
+              let pages = getCurrentPages(); //获取小程序页面栈
+              pages[pages.length -2].goBackUpdateInfo(); //使用上个页面的实例对象的方法
+              wx.navigateBack();
             },
             fail:function(res) {
               console.log("Modify失败");

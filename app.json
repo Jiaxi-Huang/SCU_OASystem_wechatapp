@@ -12,6 +12,7 @@
     "pages/todo/todo",
     "pages/todo/todo_add",
     "pages/todo/todo_modify",
+    "pages/todo/todo_info",
     "pages/meeting/meeting",
     "pages/spacereserve/spacereserve",
     "pages/service/service",

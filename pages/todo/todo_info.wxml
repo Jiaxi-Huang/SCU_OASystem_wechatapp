@@ -1,0 +1,54 @@
+<view class="container container-gray">
+	<view class="group">
+		<view class="group-header">待办事项详情</view>
+		<view class="group-body">
+			<view class="input-list">
+				<view class="input-item">
+          <text class="input-item-label">标题</text>
+          <view class="input-item-content">
+            <text>{{record.todo_title}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">内容</text>
+          <view class="input-item-content">
+            <text>{{record.todo_ctnt}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">截止时间</text>
+          <view class="input-item-content">
+            <text>{{record.todo_ddl}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">状态</text>
+          <view class="input-item-content">
+            <text>{{record.todo_fin}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">事项ID</text>
+          <view class="input-item-content">
+            <text>{{record.todo_id}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">创建时间</text>
+          <view class="input-item-content">
+            <text>{{record.todo_crt}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">添加者ID</text>
+          <view class="input-item-content">
+            <text>{{record.adder_id}}</text>
+          </view>
+        </view>
+			</view>
+		</view>
+	</view>
+	<view class="btn-submit">
+		<button class="btn-block btn-orange" bindtap="applySubmit">返回</button>
+	</view>
+</view>

@@ -8,90 +8,91 @@ Page({
     statusindex:0,
     jobarr:[],
     jobindex:0,
-    type:"",
-    time:"",
-    de_id:"",
     uploadimgs:[], //上传图片列表
     editable: false, //是否可编辑
     uploadAttachmentId:[],
-    dateTimeArray: [],
-    dateTime: null,
-    dateTimeArray1: [],
-    dateTime1: null,
+    // todo record
+    record: null,
+    // date time picker
     dateTimeStr: null,
+    date: '2018-10-01',
+    time: '12:00',
+    dateTimeArray: null,
+    dateTime: null,
+    dateTimeArray1: null,
+    dateTime1: null,
+    startYear: 2000,
+    endYear: 2050
   },
   onLoad: function () {
        // 获取完整的年月日 时分秒，以及默认显示的数组
        var obj = dateTimePicker.dateTimePicker(this.data.startYear, this.data.endYear);
-       var obj1 = dateTimePicker.dateTimePicker(this.data.startYear, this.data.endYear);
        // 精确到分的处理，将数组的秒去掉
-       var lastArray = obj1.dateTimeArray.pop();
-       var lastTime = obj1.dateTime.pop();
+       obj.dateTimeArray.pop();
+       obj.dateTime.pop();
    
        this.setData({
          dateTime: obj.dateTime,
          dateTimeArray: obj.dateTimeArray,
-         dateTimeArray1: obj1.dateTimeArray,
-         dateTime1: obj1.dateTime
        });
   },
   applySubmit:function(){
-    if (!this.checkInput()) {
-      return;
-    }
     let that = this;
-    console.log(that.data.type);
-    console.log(that.data.time);
-    console.log(that.data.de_id);
-    wx.showModal({
-      cancelColor: "cancelColor",
-      title: '提示',
-      content: '确认要添加该记录吗',
-      complete: (res) => {
-        if (res.confirm) {
-          wx.request({
-            url: 'http://localhost:8890/WeChatDemo_war_exploded/device_file_servlet_action?action=add_device_record',
-            data:{
-              "device_id":that.data.de_id,
-              "device_type":that.data.type,
-              "gps_time":that.data.time,
-              "attachment_ids":that.data.uploadAttachmentId,
-            },
-            success:function(res) {
-              wx.showToast({
-                title: '成功添加',
-                duration:1000,
-                success:function (res) {
-                  setTimeout(function () {
-                    wx.navigateTo({
-                      url: 'todo_list'
-                    }, 1000);
-                  })
-                }
-              })
-             
-            },
-            fail:function(res) {
-              console.log("Add失败");
-            }
-          })
-       }
+    let record = that.data.record;    
+    wx.getStorage({
+      key: 'accessToken', 
+      success: function(res) {
+        const accessToken = res.data;
+        // console.log("新增的的todo record");
+        record.todo_fin = '未完成';
+        record.acsTkn = accessToken;
+        wx.request({
+          url: 'http://localhost:8080/api/todolist/add',
+          data: record,
+          method: 'POST',
+          success:function(res) {
+            let pages = getCurrentPages(); //获取小程序页面栈
+            pages[pages.length -2].goBackUpdateInfo(); //使用上个页面的实例对象的方法
+            wx.navigateBack();
+          },
+          fail:function(res) {
+              
+          }
+        })
+      },
+      fail: function(err) {
+        // 如果获取失败，这里会执行
+        console.error('获取accessToken失败:', err);
       }
-    })
-  },
-  inputType:function (e) {
-    this.setData({
-      type:e.detail.value
     });
+    // wx.showModal({
+    //   cancelColor: "cancelColor",
+    //   title: '提示',
+    //   content: '确认要修改该记录吗',
+    //   complete: (res) => {
+    //     if (res.confirm) {
+    //       wx.request({
+    //         url: 'http://localhost:8080/api/todolist/modifyRec',
+    //         method: 'POST',
+    //         data: record,
+    //         success:function(res) {
+    //           wx.navigateTo({
+    //             url: 'todo'
+    //           });
+    //         },
+    //         fail:function(res) {
+    //           console.log("Modify失败");
+    //         }
+    //       })
+    //    }
+    //   }
+    // })
   },
-  inputDeId:function (e) {
+  inputChange: function (e) {
+    const field = e.target.dataset.field;  
+    const value = e.detail.value;
     this.setData({
-      de_id:e.detail.value
-    });
-  },
-  inputGps:function (e) {
-    this.setData({
-      time:e.detail.value
+      [`record.${field}`]: value
     });
   },
   chooseImage:function() {
@@ -195,11 +196,12 @@ Page({
     this.setData({ dateTime: e.detail.value });
     var dateTimeStr = this.getCurrentDateTime();
     this.setData({
-      time:dateTimeStr,
+      "record.todo_ddl": dateTimeStr
     });
   },
   getCurrentDateTime:function () {
-    var str =  this.data.dateTimeArray[0][this.data.dateTime[0]]+"-"+this.data.dateTimeArray[1][this.data.dateTime[1]]+"-"+this.data.dateTimeArray[2][this.data.dateTime[2]]+" "+this.data.dateTimeArray[3][this.data.dateTime[3]]+"-"+this.data.dateTimeArray[4][this.data.dateTime[4]]+"-"+this.data.dateTimeArray[5][this.data.dateTime[5]];
+    // var str =  this.data.dateTimeArray[0][this.data.dateTime[0]]+"-"+this.data.dateTimeArray[1][this.data.dateTime[1]]+"-"+this.data.dateTimeArray[2][this.data.dateTime[2]]+" "+this.data.dateTimeArray[3][this.data.dateTime[3]]+":"+this.data.dateTimeArray[4][this.data.dateTime[4]]+"-"+this.data.dateTimeArray[5][this.data.dateTime[5]];
+    var str =  this.data.dateTimeArray[0][this.data.dateTime[0]]+"-"+this.data.dateTimeArray[1][this.data.dateTime[1]]+"-"+this.data.dateTimeArray[2][this.data.dateTime[2]]+" "+this.data.dateTimeArray[3][this.data.dateTime[3]]+":"+this.data.dateTimeArray[4][this.data.dateTime[4]];
     return str;
   },
   changeDateTime1(e) {
@@ -207,10 +209,8 @@ Page({
   },
   changeDateTimeColumn(e){
     var arr = this.data.dateTime, dateArr = this.data.dateTimeArray;
-
     arr[e.detail.column] = e.detail.value;
     dateArr[2] = dateTimePicker.getMonthDay(dateArr[0][arr[0]], dateArr[1][arr[1]]);
-
     this.setData({
       dateTimeArray: dateArr,
       dateTime: arr
