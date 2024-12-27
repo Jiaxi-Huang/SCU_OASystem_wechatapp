@@ -18,6 +18,10 @@ Page({
     page: 0,  //分页
     meeting_list:[],
     flitered_list:[],
+
+    isPopupVisible: false,  // 控制弹出框显示
+    inputValue: '',         // 存储输入框的值
+    message: ''             // 显示查询结果消息
   },
   onLoad: function () { //加载数据渲染页面
     // this.fetchServiceData();
@@ -137,6 +141,73 @@ Page({
       showfilterindex: null
     })
   },
+  onInputChange(e) {
+    this.setData({
+      inputValue: e.detail.value
+    });
+  },
+  // 查询按钮点击事件
+  onQueryClick() {
+    const mtin_id = Number(this.data.inputValue.trim());
+    if (!mtin_id && mtin_id != 0) {
+      wx.showToast({
+        title: '请输入会议ID',
+        icon: 'error',
+        duration: 2000,
+      })
+      return;
+    }
+    let all = this.data.meeting_list;
+    for (const record of all) {
+      if (record.mtin_id == mtin_id) {
+        wx.showToast({
+          title: '该会议已经添加',
+          icon: 'error',
+          duration: 2000,
+        })
+        return;
+      }
+    }
+    wx.request({
+      url: 'http://localhost:8080/api/meetings/search_by_mtin_id', // 替换为你的API地址
+      method: 'POST',
+      data: { data: [mtin_id] },
+      success: (res) => {
+        let data = res.data;
+        if (data.status === 0) {
+          var record = JSON.stringify(data.data[0]);
+          wx.navigateTo({
+            url: 'meeting_add?record=' + record,
+          });
+        } else {
+          wx.showToast({
+            title: "没有找到对应的会议",
+            icon: 'error',
+            duration: 2000,
+          })
+        }
+      },
+      fail: () => {
+        wx.showToast({
+          title: "查询失败，请稍后再试",
+          icon: 'error',
+          duration: 2000,
+        })
+      }
+    });
+    
+  },
+   // 关闭弹出框
+   closePopup() {
+    this.setData({
+      isPopupVisible: false,
+      inputValue: '',  // 清空输入框
+      message: ''      // 清空查询结果消息
+    });
+  },
+  showAddSuccess:function () {
+    this.closePopup();
+  },
   scrollHandle:function(e){ //滚动事件
     this.setData({
       scrolltop:e.detail.scrollTop
@@ -197,7 +268,7 @@ Page({
       // console.log(batch);
       batch.map(item => {
         item.url = i? i==1? "/images/biaoxingfill.png": "/images/shizhong.png" : "/images/tishifill.png";
-        item.status = i? i==1? "预约": "已完成" : "今天";
+        item.status = i? i==1? "今天": "已完成" : "预约";
         all.push(item);
       })
     }
@@ -219,6 +290,30 @@ Page({
     var record = JSON.stringify(e.target.dataset.record);
     wx.navigateTo({
       url: 'meeting_info?record=' + record,
+    });
+  },
+  onShare:function (e)  { //e is "event"
+    var record = e.target.dataset.record;
+    const content = "[SCU_OA]我分享了一个会议\n标题: " 
+    + record.mtin_title + "\n会议ID: " + record.mtin_id + "\n开始时间: " + record.mtin_st;
+    wx.setClipboardData({
+      data: content, // 要复制的内容
+      success: function () {
+        // 复制成功后的回调
+        wx.showToast({
+          title: '会议信息已复制',
+          icon: 'success',
+          duration: 2000,
+        });
+      },
+      fail: function () {
+        // 复制失败的回调
+        wx.showToast({
+          title: '复制失败',
+          icon: 'none',
+          duration: 2000,
+        });
+      },
     });
   },
   goBackUpdateInfo:function ()  { //e is "event"
@@ -262,8 +357,8 @@ Page({
     });
   },
   onAddRecord:function () {
-    wx.navigateTo({
-      url: 'meeting_add',
+    this.setData({
+      isPopupVisible: true
     });
   },
   onCreateRecord:function () {

@@ -2,12 +2,26 @@
 <view class="container">
 	<view class="search-flex {{scrolltop>200?'tophide':''}}">
 		<view class="search-bar">
-			<input type="text" maxlength="12" placeholder="请输入标题关键查询" bindinput="inputSearch"></input>
+			<input type="text" maxlength="12"  placeholder="请输入标题关键查询" bindinput="inputSearch"></input>
 			<button class="search-btn" bindtap="submitSearch" wx:if="{{showsearch}}">搜索</button>
 		</view>
 		<button class="search-extra-btn" bindtap='refresh'>刷新</button>
 	</view>
-  
+
+  <view class="filter-flex">
+  <!-- 弹出框 -->
+    <view class="overlay" wx:if="{{isPopupVisible}}" bindtap="closePopup"></view>
+    <view class="popup" wx:if="{{isPopupVisible}}">
+      <input type="text" class="inputText" placeholder="请输入ID" bindinput="onInputChange" value="{{inputValue}}" />
+      <button class="btn-block btn-orange inputBtn" bindtap="onQueryClick">查询</button>
+    </view>
+    
+    <!-- 显示查询结果 -->
+    <view wx:if="{{message}}">
+      <text>{{message}}</text>
+    </view>
+  </view>
+
 	<view class="filter-flex">
 		<view class="filter-tab">
 			<text bindtap="setFilterPanel" data-findex="1" class="{{showfilterindex==1?'active':''}}">筛选</text>
@@ -21,6 +35,7 @@
 		</view>
 		<view class="filter-shadow" wx:if="{{showfilter}}" bindtap="hideFilter"></view>
 	</view>
+
   <view class="btn-submit">
 		<button class="btn-block btn-orange leftBtn" bindtap="onAddRecord">添加会议</button>
     <button class="btn-block btn-orange rightBtn" bindtap="onCreateRecord">创建会议</button>
@@ -43,6 +58,7 @@
 						<text bindtap="onDeleteRecord" data-mtin_id="{{item.mtin_id}}">删除</text> 
             <text bindtap="onModifyRecord" data-record="{{item}}">修改</text>
             <text bindtap="onInfo" data-record="{{item}}">详情</text>
+            <text bindtap="onShare" data-record="{{item}}">分享会议</text>
 					</view>
 				</view>
 			</navigator>

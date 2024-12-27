@@ -1,1 +1,10 @@
-/* pages/todo/todo_add.wxss */
+/* pages/todo/todo_modify.wxss */
+.leftBtn {
+  width: 50% !important;
+  float:left;
+  font-weight: 100;
+}
+.rightBtn {
+  width: 50% !important;
+  float:right;
+}

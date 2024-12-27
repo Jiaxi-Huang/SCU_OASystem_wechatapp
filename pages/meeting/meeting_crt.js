@@ -30,11 +30,12 @@ Page({
        // 精确到分的处理，将数组的秒去掉
        obj.dateTimeArray.pop();
        obj.dateTime.pop();
-   
+  
        this.setData({
          dateTime: obj.dateTime,
          dateTimeArray: obj.dateTimeArray,
        });
+       this.presetDateTime();
   },
   applySubmit:function(){
     let that = this;
@@ -42,12 +43,10 @@ Page({
     wx.getStorage({
       key: 'accessToken', 
       success: function(res) {
-        const accessToken = res.data;
-        // console.log("新增的的todo record");
-        record.todo_fin = '未完成';
-        record.acsTkn = accessToken;
+        record.accessToken = res.data;
+        record.mtin_fin =  0;
         wx.request({
-          url: 'http://localhost:8080/api/todolist/add',
+          url: 'http://localhost:8080/api/meetings/createMeeting',
           data: record,
           method: 'POST',
           success:function(res) {
@@ -196,7 +195,14 @@ Page({
     this.setData({ dateTime: e.detail.value });
     var dateTimeStr = this.getCurrentDateTime();
     this.setData({
-      "record.todo_ddl": dateTimeStr
+      "record.mtin_st": dateTimeStr
+    });
+  },
+  presetDateTime(){
+    var dateTimeStr = this.getCurrentDateTime();
+    console.log(dateTimeStr);
+    this.setData({
+      "record.mtin_st": dateTimeStr
     });
   },
   getCurrentDateTime:function () {
@@ -214,17 +220,6 @@ Page({
     this.setData({
       dateTimeArray: dateArr,
       dateTime: arr
-    });
-  },
-  changeDateTimeColumn1(e) {
-    var arr = this.data.dateTime1, dateArr = this.data.dateTimeArray1;
-
-    arr[e.detail.column] = e.detail.value;
-    dateArr[2] = dateTimePicker.getMonthDay(dateArr[0][arr[0]], dateArr[1][arr[1]]);
-
-    this.setData({
-      dateTimeArray1: dateArr,
-      dateTime1: arr
     });
   },
 

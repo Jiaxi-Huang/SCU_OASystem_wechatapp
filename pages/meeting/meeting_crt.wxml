@@ -1,23 +1,35 @@
-<!--pages/todo/todo_add.wxml-->
+<!--pages/mtin/mtin_add.wxml-->
 <view class="container container-gray">
 	<view class="group">
-		<view class="group-header">待办事项添加</view>
+		<view class="group-header">创建会议</view>
 		<view class="group-body">
 			<view class="input-list">
 				<view class="input-item">
-					<text class="input-item-label">标题</text>
+					<text class="input-item-label">会议标题</text>
 					<view class="input-item-content">
-						<input type="text" value="{{type}}" data-field="todo_title" bindinput="inputChange"></input>
+						<input type="text" value="{{type}}" data-field="mtin_title" bindinput="inputChange"></input>
 					</view>
 				</view>
         <view class="input-item">
-          <text class="input-item-label">内容</text>
+          <text class="input-item-label">会议内容</text>
           <view class="input-item-content">
-            <textarea type="text" auto-height="{{true}}" value="{{record.todo_ctnt}}" bindinput="inputChange" data-field="todo_ctnt"></textarea>
+            <textarea type="text" auto-height="{{true}}" value="{{record.mtin_ctnt}}" bindinput="inputChange" data-field="mtin_ctnt"></textarea>
           </view>
         </view>
         <view class="input-item">
-					<text class="input-item-label">截止时间</text>
+          <text class="input-item-label">会议地点</text>
+          <view class="input-item-content">
+            <textarea type="text" auto-height="{{true}}" value="{{record.mtin_loc}}" bindinput="inputChange" data-field="mtin_loc"></textarea>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">会议时长</text>
+          <view class="input-item-content">
+            <textarea type="text" auto-height="{{true}}" value="{{record.mtin_len}}" bindinput="inputChange" data-field="mtin_len"></textarea>
+          </view>
+        </view>
+        <view class="input-item">
+					<text class="input-item-label">开始时间</text>
 					<view class="input-item-content">
             <picker mode="multiSelector" value="{{dateTime}}" bindchange="changeDateTime" bindcolumnchange="changeDateTimeColumn" range="{{dateTimeArray}}">
            <view class="tui-picker-detail">
