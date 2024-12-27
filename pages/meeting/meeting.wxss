@@ -1,1 +1,94 @@
-/* pages/meeting/meeting.wxss */
+/* pages/todo/todo_list.wxss */
+.service-list{
+	padding: 0 20rpx;
+}
+.service-item{
+	display: flex;
+	padding: 20rpx 0; 
+	border-bottom: 1rpx solid #e8e8e8;
+}
+
+.service-img{
+	width: 220rpx;
+	height: 156rpx;
+}
+.service-item image{
+	width: 220rpx;
+	height: 156rpx;
+}
+.service-text{
+	flex: 1;
+	margin-left: 20rpx;
+	width: 100%;
+}
+.service-text .service-tite{
+	color: #333;
+	width: 100%;
+	font-size: 34rpx;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.service-tags{
+	margin: 6rpx 0;
+}
+.service-tags text{
+	padding: 6rpx 16rpx;
+	border: 1rpx solid #f7982a;
+	line-height: 1;
+	color: #f7982a;
+	font-size: 28rpx;
+	border-radius: 4rpx;
+	margin-right: 10rpx;
+	margin-bottom: 10rpx;
+	white-space: nowrap;
+}
+.service-city{
+	color: #666;
+}
+.leftBtn {
+  width: 50% !important;
+  float:left;
+  font-weight: 100;
+}
+.rightBtn {
+  width: 50% !important;
+  float:right;
+}
+
+.inputText {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;  /* 使文本水平居中 */
+}
+.searchText {
+  border-radius: 5px;
+}
+
+.inputBtn {
+  width: 50% !important;
+  margin-top: 20px;  /* 增加输入框和按钮之间的垂直间隔 */
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);  /* 半透明的黑色阴影 */
+  z-index: 998;  /* 确保背景层在弹出框下面 */
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}

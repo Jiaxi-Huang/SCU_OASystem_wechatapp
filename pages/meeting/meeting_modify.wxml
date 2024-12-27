@@ -1,0 +1,43 @@
+<view class="container container-gray">
+	<view class="group">
+		<view class="group-header">会议修改</view>
+		<view class="group-body">
+			<view class="input-list">
+				<view class="input-item">
+          <text class="input-item-label">会议标题</text>
+          <view class="input-item-content">
+            <input type="text" value="{{record.mtin_title}}" bindinput="inputChange" data-field="mtin_title"></input>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">会议内容</text>
+          <view class="input-item-content">
+            <textarea type="text" auto-height="{{true}}" value="{{record.mtin_ctnt}}" bindinput="inputChange" data-field="mtin_ctnt"></textarea>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">开始时间</text>
+          <view class="input-item-content">
+            <input type="text" value="{{record.mtin_st}}" bindinput="inputChange" data-field="mtin_st"></input>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">会议地点</text>
+          <view class="input-item-content">
+            <input type="text" value="{{record.mtin_loc}}" bindinput="inputChange" data-field="mtin_loc"></input>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">会议时长</text>
+          <view class="input-item-content">
+            <input type="text" value="{{record.mtin_len}}" bindinput="inputChange" data-field="mtin_len"></input>
+          </view>
+        </view>
+        
+			</view>
+		</view>
+	</view>
+	<view class="btn-submit">
+		<button class="btn-block btn-orange" bindtap="applySubmit">提交</button>
+	</view>
+</view>

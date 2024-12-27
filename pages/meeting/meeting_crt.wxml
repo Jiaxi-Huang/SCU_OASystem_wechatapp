@@ -1,0 +1,59 @@
+<!--pages/mtin/mtin_add.wxml-->
+<view class="container container-gray">
+	<view class="group">
+		<view class="group-header">创建会议</view>
+		<view class="group-body">
+			<view class="input-list">
+				<view class="input-item">
+					<text class="input-item-label">会议标题</text>
+					<view class="input-item-content">
+						<input type="text" value="{{type}}" data-field="mtin_title" bindinput="inputChange"></input>
+					</view>
+				</view>
+        <view class="input-item">
+          <text class="input-item-label">会议内容</text>
+          <view class="input-item-content">
+            <textarea type="text" auto-height="{{true}}" value="{{record.mtin_ctnt}}" bindinput="inputChange" data-field="mtin_ctnt"></textarea>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">会议地点</text>
+          <view class="input-item-content">
+            <textarea type="text" auto-height="{{true}}" value="{{record.mtin_loc}}" bindinput="inputChange" data-field="mtin_loc"></textarea>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">会议时长</text>
+          <view class="input-item-content">
+            <textarea type="text" auto-height="{{true}}" value="{{record.mtin_len}}" bindinput="inputChange" data-field="mtin_len"></textarea>
+          </view>
+        </view>
+        <view class="input-item">
+					<text class="input-item-label">开始时间</text>
+					<view class="input-item-content">
+            <picker mode="multiSelector" value="{{dateTime}}" bindchange="changeDateTime" bindcolumnchange="changeDateTimeColumn" range="{{dateTimeArray}}">
+           <view class="tui-picker-detail">
+            {{dateTimeArray[0][dateTime[0]]}}-{{dateTimeArray[1][dateTime[1]]}}-{{dateTimeArray[2][dateTime[2]]}} {{dateTimeArray[3][dateTime[3]]}}:{{dateTimeArray[4][dateTime[4]]}}
+          </view>
+  </picker>
+					</view>
+				</view>
+
+      <!-- <view class="group-header">上传图片</view>
+			<view class="group-body">
+				<view class="img-upload">
+					<view class="img-add" bindtap="chooseImage"></view>
+					<view class="img-item" bindlongtap="editImage" wx:for="{{uploadimgs}}" wx:key="{{index}}">
+						<icon type="clear" size="20" color="red" style="display:{{editable?'block':'none'}}" bindtap="deleteImg" data-index="{{index}}"/>
+						<image src="{{item}}" mode="aspectFill"></image>
+					</view>
+				</view>
+			</view> -->
+
+			</view>
+		</view>
+	</view>
+	<view class="btn-submit">
+		<button class="btn-block btn-orange" bindtap="applySubmit">提交</button>
+	</view>
+</view>

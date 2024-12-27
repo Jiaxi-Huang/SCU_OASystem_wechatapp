@@ -1,0 +1,73 @@
+<view class="container container-gray">
+	<view class="group">
+		<view class="group-header">会议详情</view>
+		<view class="group-body">
+			<view class="input-list">
+				<view class="input-item">
+          <text class="input-item-label">会议标题</text>
+          <view class="input-item-content">
+            <text>{{record.mtin_title}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">会议ID</text>
+          <view class="input-item-content">
+            <text>{{record.mtin_id}}</text>
+          </view>
+        </view>
+        
+        <view class="input-item">
+          <text class="input-item-label">会议内容</text>
+          <view class="input-item-content">
+            <text>{{record.mtin_ctnt}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">开始时间</text>
+          <view class="input-item-content">
+            <text>{{record.mtin_st}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">地点</text>
+          <view class="input-item-content">
+            <text>{{record.mtin_loc}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">会议时长</text>
+          <view class="input-item-content">
+            <text>{{record.mtin_len}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">状态</text>
+          <view class="input-item-content">
+            <text>{{record.status}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">主持人ID</text>
+          <view class="input-item-content">
+            <text>{{record.mtin_host}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">创建时间</text>
+          <view class="input-item-content">
+            <text>{{record.mtin_crt}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">添加者ID</text>
+          <view class="input-item-content">
+            <text>{{record.adder_id}}</text>
+          </view>
+        </view>
+			</view>
+		</view>
+	</view>
+	<view class="btn-submit">
+		<button class="btn-block btn-orange" bindtap="applySubmit">返回</button>
+	</view>
+</view>
