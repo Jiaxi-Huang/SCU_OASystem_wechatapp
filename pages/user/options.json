@@ -1,0 +1,12 @@
+{
+  "departments": {
+    "IT": "研发部",
+    "Market": "市场部",
+    "HR": "人事部"
+  },
+  "roles": {
+    "admin": "管理员",
+    "manager": "部门经理",
+    "worker": "员工"
+  }
+}

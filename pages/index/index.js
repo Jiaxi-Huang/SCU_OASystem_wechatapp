@@ -3,12 +3,14 @@
 // var app = getApp();
 Page({
   data: {
+    menu:[],
     indexmenu:[],
     imgUrls: []
   },
   onLoad:function(){
     //生命周期函数--监听页面加载
     this.fetchData();
+    this.fetchRoute();
     // var that = this
     // //调用应用实例的方法获取全局数据
     // app.getUserInfo(function(userInfo){
@@ -18,9 +20,37 @@ Page({
     //   })
     // })
   },
+  fetchRoute:function(){
+    const menu = this.data.menu
+    wx.request({
+      url: 'http://localhost:8080/api/auth/wechat/routes',
+      method: 'POST',
+      data:{
+        accessToken:wx.getStorageSync('accessToken')
+      },
+      success: res=>{
+        if(res.data.status == 0){
+          this.setData({
+            indexmenu: menu.filter(item => res.data.data.authedRoutes.includes(item.url))
+          })
+        }
+        else{
+          wx.showToast({
+            title: res.data.message,
+          })
+        }
+      },
+      fail: res=>{
+        wx.showToast({
+          title: res.data.message,
+        })
+        console.log(res.data.message)
+      }
+    })
+  },
   fetchData:function(){
     this.setData({
-      indexmenu:[
+      menu:[
         {
           'icon':'./../../images/icon_01.png',
           'text':'众创空间',

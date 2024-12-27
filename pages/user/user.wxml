@@ -28,7 +28,7 @@
 		<view class="service-list">
 			<!-- 如果 isFiltered 为真则显示 filterlist，否则显示 userlist -->
       <block wx:if="{{isFiltered}}">
-        <navigator class="service-item" wx:for="{{filterlist}}" wx:key="{{item.userId}}" url="../user/user_modify?id={{item.userId}}">
+        <navigator class="service-item" wx:for="{{filterlist}}" wx:key="{{item.userId}}" url="./user_detail?id={{item.userId}}">
           <view class="service-img">
             <image src="{{item.userAvatar}}" mode="aspectFill"></image>
           </view>
@@ -43,7 +43,7 @@
         </navigator>
       </block>
       <block wx:else>
-        <navigator class="service-item" wx:for="{{userlist}}" wx:key="{{item.userId}}" url="../user/user_modify?id={{item.userId}}">
+        <navigator class="service-item" wx:for="{{userlist}}" wx:key="{{item.userId}}" url="./user_detail?id={{item.userId}}">
           <view class="service-img">
             <image src="{{item.userAvatar}}" mode="aspectFill"></image>
           </view>

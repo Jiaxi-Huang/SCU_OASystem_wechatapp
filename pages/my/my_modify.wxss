@@ -1,47 +1,69 @@
 /* user_modify.wxss */
-
-/* 表单整体容器 */
-.form-container {
-  padding: 10px;
-  background-color: #f5f5f5;
+.container {
+  padding: 20px;
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
   width: 90%; /* 确保宽度适应父容器 */
+  max-width: 600px; /* 最大宽度限制 */
   box-sizing: border-box; /* 确保内边距不会使容器超出预期宽度 */
 }
-/* 每个表单项的样式 */
-.form-item {
-  width: 50%;
-  padding: 90px;
+
+.container-gray {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 分组样式 */
+.group {
+  width: 100%;
   background-color: #fff;
-  border-bottom: 1px solid #e0e0e0;
-  display: flex;
-  flex-direction: column; /* 改为垂直排列以适应表单元素 */
-  justify-content: space-between;
-  align-items: center;
-  font-size: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.group-header {
+  padding: 15px;
+  background-color: #f7f7f7;
+  font-size: 18px;
+  font-weight: bold;
   color: #333;
-  transition: all 0.3s ease;
+  border-bottom: 1px solid #e0e0e0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
-/* 鼠标悬停时的表单项样式 */
-.form-item:hover {
-  background-color: #f9f9f9;
+.group-body {
+  padding: 20px;
 }
 
-/* 表单项中的标签和内容样式 */
-.form-item text {
+/* 输入列表和输入项样式 */
+.input-list {
+  width: 100%;
+}
+
+.input-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.input-item-label {
   font-weight: bold;
   color: #555;
   margin-bottom: 8px;
 }
 
-.form-item input,
-.form-item textarea {
+.input-item-content {
+  width: 100%;
+}
+
+input,
+.picker {
   width: 100%;
   padding: 10px;
   font-size: 16px;
@@ -50,69 +72,60 @@
   transition: border-color 0.3s ease;
 }
 
-.form-item input:focus,
-.form-item textarea:focus {
+input:focus,
+.picker:focus {
   border-color: #1aad19;
   outline: none;
 }
 
-.form-item textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-/* 最后一个表单项移除底部边框 */
-.form-item:last-child {
-  border-bottom: none;
-}
-
 /* 提交按钮样式 */
-.submit-btn {
-  width: 70%;
+.btn-submit {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btn-block {
+  width: 100%;
   padding: 12px;
-  background-color: #1481c0; /* 使用与编辑按钮相同的颜色 */
+  background-color: #1481c0;
   border: none;
   border-radius: 5px;
   color: white;
   font-size: 16px;
   font-weight: bold;
   text-align: center;
-  margin-top: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
-/* 鼠标悬停时的提交按钮样式 */
+.submit-btn {
+  background-color: #1481c0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .submit-btn:hover {
   background-color: #21485f;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* 按钮被点击时（按下）的样式 */
 .submit-btn:active {
   transform: translateY(2px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 禁用状态下的样式 */
-.submit-btn[disabled] {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
 /* 响应式设计 */
 @media (min-width: 768px) {
-  .form-container {
+  .container {
     padding: 30px;
   }
 
-  .form-item {
+  .group {
     padding: 20px;
   }
 
-  .submit-btn {
-    width: 50%;
-    padding: 15px;
+  .btn-block {
     font-size: 18px;
+    padding: 15px;
   }
 }

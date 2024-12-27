@@ -1,26 +1,42 @@
 Page({
   data: {
+    userId:null,
     userName:'',
     userDepartment:'',
     userRole:'',
     userEmail:'',
     userPhone:'',
     userAvatar:'',
-    userIntro:''
+    userIntro:'',
+    departmentMap: {
+      IT: '研发部',
+      Market: '市场部',
+      HR: '人事部'
+    },
+    roleMap: {
+      admin: '管理员',
+      manager: '部门经理',
+      worker: '员工'
+    }
   },
-  onLoad: function () { //加载数据渲染页面
+  onLoad: function (options) { //加载数据渲染页面
+    this.parseJSON(options);
     this.fetchUserInfo();
   },
   onShow() {
     // 确保每次显示页面时都加载最新的本地存储数据
     this.fetchUserInfo();
   },
+  parseJSON:function(options){
+    this.setData({ userId: options.id });
+  },
   fetchUserInfo:function(){  //输入搜索文字
     wx.request({
-      url: 'http://localhost:8080/api/auth/user/userInfo',
+      url: 'http://localhost:8080/api/admin/user/detail',
       method: 'POST',
       data:{
-        accessToken:wx.getStorageSync('accessToken')
+        accessToken:wx.getStorageSync('accessToken'),
+        userId:this.data.userId
       },
       success: res=>{
         if(res.data.status == 0){
@@ -31,7 +47,7 @@ Page({
             userEmail:res.data.data.userEmail,
             userPhone:res.data.data.userPhone,
             userAvatar:res.data.data.userAvatar,
-            userIntro:res.data.data.userIntro
+            userIntro:res.data.data.userIntro,
           })
         }
         else{
@@ -48,10 +64,11 @@ Page({
       }
     })
   },
+
   navigateToModifyPage: function () {
-    const { userName, userIntro, userPhone } = this.data;
+    const { userId, userName, userDepartment, userRole } = this.data;
     wx.navigateTo({
-      url: `./my_modify?userName=${encodeURIComponent(userName)}&userIntro=${encodeURIComponent(userIntro)}`,
+      url: `./user_modify?userId=${encodeURIComponent(userId)}&userName=${encodeURIComponent(userName)}&userDepartment=${encodeURIComponent(userDepartment)}&userRole=${encodeURIComponent(userRole)}`,
     })
   }
 })
