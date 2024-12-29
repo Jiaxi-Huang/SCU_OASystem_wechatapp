@@ -51,6 +51,7 @@ Page({
   fetchData:function(){
     this.setData({
       menu:[
+
         {
           'icon':'./../../images/icon_01.png',
           'text':'众创空间',
@@ -65,6 +66,11 @@ Page({
           'icon':'./../../images/icon_05.png',
           'text':'会议室预定',
           'url':'conference'
+        },
+        {
+            'icon':'./../../images/icon_27.png',
+            'text':'天气',
+            'url':'weather'
         },
         {
           'icon':'./../../images/icon_07.png',
