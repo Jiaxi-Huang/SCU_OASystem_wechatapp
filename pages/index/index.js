@@ -68,11 +68,6 @@ Page({
           'url':'conference'
         },
         {
-            'icon':'./../../images/icon_27.png',
-            'text':'天气',
-            'url':'weather'
-        },
-        {
           'icon':'./../../images/icon_07.png',
           'text':'云资源申请',
           'url':'resource'
