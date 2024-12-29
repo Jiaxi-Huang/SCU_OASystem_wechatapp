@@ -70,5 +70,36 @@ Page({
     wx.navigateTo({
       url: `./user_modify?userId=${encodeURIComponent(userId)}&userName=${encodeURIComponent(userName)}&userDepartment=${encodeURIComponent(userDepartment)}&userRole=${encodeURIComponent(userRole)}`,
     })
+  },
+  deleteUser: function () {
+    const { userId } = this.data;
+    wx.showModal({
+      title: '提示',
+      content: '确认要修改该记录吗？',
+      success: (res) => {
+        if (res.confirm) {
+          wx.request({
+            url: 'http://localhost:8080/api/admin/user/delete',
+            method: 'POST',
+            data:{
+              accessToken:wx.getStorageSync('accessToken'),
+              userId:userId
+            },
+            success: res=>{
+              if(res.data.status == 0){
+                wx.reLaunch({
+                  url: './user',
+                })
+              }
+              else{
+                wx.showToast({
+                  title: res.data.message,
+                })
+              }
+            }
+          }); 
+        }
+      }
+    });
   }
 })

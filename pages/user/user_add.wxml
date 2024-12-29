@@ -1,2 +1,42 @@
-<!--pages/user/userAdd.wxml-->
-<text>pages/user/userAdd.wxml</text>
+<view class="container container-gray">
+  <view class="group">
+    <view class="group-header">用户信息修改</view>
+    <view class="group-body">
+      <view class="input-list">
+        <view class="input-item">
+          <text class="input-item-label">用户名</text>
+          <view class="input-item-content">
+            <input type="text" value="{{userName}}" bindinput="inputChange" data-field="userName"></input>
+          </view>
+        </view>
+
+        <!-- 部门选择框 -->
+        <view class="input-item">
+          <text class="input-item-label">部门</text>
+          <view class="input-item-content">
+            <picker mode="selector" range-key="value" range="{{departmentOptions}}" value="{{departmentIndex}}" bindchange="bindDepartmentChange" data-pickername="department">
+              <view class="picker">
+                {{departmentOptions[departmentIndex] ? departmentOptions[departmentIndex].value : '请选择'}}
+              </view>
+            </picker>
+          </view>
+        </view>
+
+        <!-- 职能选择框 -->
+        <view class="input-item">
+          <text class="input-item-label">职能</text>
+          <view class="input-item-content">
+            <picker mode="selector" range-key="value" range="{{roleOptions}}" value="{{roleIndex}}" bindchange="bindRoleChange" data-pickername="role">
+              <view class="picker">
+                {{roleOptions[roleIndex] ? roleOptions[roleIndex].value : '请选择'}}
+              </view>
+            </picker>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="btn-submit">
+    <button class="btn-block submit-btn" bindtap="applySubmit">提交</button>
+  </view>
+</view>

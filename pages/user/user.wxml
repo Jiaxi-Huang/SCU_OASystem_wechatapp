@@ -1,4 +1,6 @@
 <view class="container">
+  <!-- 新增用户的按钮 -->
+  <button class="add-user-btn" bindtap="addUser">新增用户</button>
 	<view class="search-flex {{scrolltop>200?'tophide':''}}">
 		<view class="search-bar">
 			<input type="text" maxlength="12" placeholder="请输入关键字查询" bindinput="inputSearch"></input>

@@ -41,7 +41,6 @@
 .group-body {
   padding: 20px;
 }
-
 /* 输入列表和输入项样式 */
 .input-list {
   width: 100%;

@@ -33,8 +33,8 @@
       <text>{{userIntro}}</text>
     </view>
   </view>
-  
   <view>
-    <button class="edit-btn" bindtap="navigateToModifyPage">修改个人信息</button>
+    <button class="edit-btn" bindtap="navigateToModifyPage">修改用户信息</button>
+    <button class="delete-btn" bindtap="deleteUser">删除用户</button>
   </view>
 </view>
