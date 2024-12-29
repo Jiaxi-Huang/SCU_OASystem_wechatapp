@@ -1,2 +1,29 @@
-<!--pages/weather/weather.wxml-->
-<text>pages/weather/weather.wxml</text>
+<!-- pages/weather/weather.wxml -->
+<image src="../../images/beijing.jpeg" class="bg-image" />
+<view class="search">
+  <form bindsubmit="search">
+    <input type="text" name="city" placeholder="请输入城市" />
+    <button form-type="submit" type="primary" size="mini">查询天气</button>
+  </form>
+</view>
+<view class="main">
+  <view class="info" wx:if="{{code === 0}}">
+    <view class="temp">{{todayWeather.high}}℃</view>
+    <view class="lowhigh">空气质量 {{todayWeather.airQuality}}</view>
+    <view class="type">{{todayWeather.weather}}</view>
+    <view class="city">{{todayWeather.province}} {{todayWeather.city}}</view>
+    <view class="week">{{todayWeather.date}}</view>
+    <view class="weather">{{todayWeather.wind}}</view>
+  </view>
+</view>
+<scroll-view class="list" scroll-x wx:if="{{code === 0}}">
+  <block wx:for="{{list}}" wx:key="index">
+    <view class="item">
+      <view>{{item.weather}}</view>
+      <view>{{item.high}}℃/{{item.low}}℃</view>
+      <view>{{item.date}}</view>
+      <view>{{item.airQuality}}</view>
+      <view>{{item.wind}}</view>
+    </view>
+  </block>
+</scroll-view>

@@ -71,8 +71,8 @@
       {
         "pagePath": "pages/weather/weather",
         "text": "天气",
-        "iconPath": "images/icon_27.png",
-        "selectedIconPath": "images/icon_27.png"
+        "iconPath": "images/weather1.png",
+        "selectedIconPath": "images/weather2.png"
       },
       {
         "pagePath": "pages/map/map_menu",
