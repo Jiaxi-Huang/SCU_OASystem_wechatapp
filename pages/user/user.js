@@ -51,6 +51,11 @@ Page({
       }
     })
   },
+  addUser:function(){
+    wx.navigateTo({
+      url: './user_add',
+    })
+  },
   inputSearch:function(e){  //输入搜索文字
     this.setData({
       showsearch:e.detail.cursor>0,
