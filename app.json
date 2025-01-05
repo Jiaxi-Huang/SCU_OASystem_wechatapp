@@ -20,6 +20,7 @@
     "pages/meeting/meeting_info",
     "pages/meeting/meeting_crt",
     "pages/meeting/meeting_add",
+    "pages/file/file",
     "pages/spacereserve/spacereserve",
     "pages/service/service",
     "pages/servicedetail/servicedetail",
@@ -46,7 +47,8 @@
     "pages/map/map_menu",
     "pages/map/map_monitor",
     "pages/map/map_test",
-    "pages/leave/leaveAdd"
+    "pages/leave/leaveAdd",
+    "pages/file/_sub-tree"
   ],
   "window": {
     "backgroundTextStyle": "dark",

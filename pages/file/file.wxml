@@ -1,0 +1,65 @@
+<!--pages/file/file.wxml-->
+
+<view class="container">
+	<view class="search-flex {{scrolltop>200?'tophide':''}}">
+		<view class="search-bar">
+			<input type="text" maxlength="12" placeholder="请输入标题关键查询" bindinput="inputSearch"></input>
+			<button class="search-btn" bindtap="submitSearch" wx:if="{{showsearch}}">搜索</button>
+		</view>
+		<button class="search-extra-btn" bindtap='refresh'>刷新</button>
+	</view>
+
+
+
+
+
+
+  <view class="tree-container">
+  <block wx:for="{{treeData}}" wx:key="id">
+    <view class="folder-item">
+      <text>{{item.name}}</text>
+      <block wx:if="{{item.children.length > 0}}">
+        <view class="sub-tree">
+          <include src="_sub-tree.wxml" data="{{children: item.children}}"></include>
+        </view>
+      </block>
+    </view>
+  </block>
+</view>
+<import src="_sub-tree.wxml" />
+
+
+
+
+
+	<scroll-view class="container-body" scroll-y="true" scroll-top="{{scrolltop}}" bindscroll="scrollHandle" lower-threshold="50" bindscrolltolower="scrollLoading" >
+		<view class="service-list">
+			<navigator class="service-item" wx:for="{{flitered_list}}" wx:key="{{item.id}}">
+				<view class="service-img">
+					<image src="{{item.url}}" mode="objectFill" 
+          bindtap="onStatusChange" data-record="{{item}}"></image>
+				</view>
+				<view class="service-text" >
+					<view class="service-tite">{{item.fileName}}</view>
+					<view class="service-tags">
+						<text>文件ID：{{item.id}}</text>
+					</view>
+					<text class="service-city">文件类型：{{item.ext}}</text>
+        <view>
+          <text class="service-city">文件大小：{{item.size}}</text>
+        </view> 
+          <view class="service-tags">
+						<text bindtap="onDeleteRecord" data-id="{{item.id}}">删除</text> 
+            <text bindtap="onModifyRecord" data-record="{{item}}">修改</text>
+            <text bindtap="onInfo" data-record="{{item}}">详情</text>
+					</view>
+				</view>
+			</navigator>
+		</view>
+		<view class="gototop {{scrolltop>200?'active':''}}" bindtap="goToTop"></view>
+	</scroll-view>
+  <view class="btn-submit">
+		<button class="btn-block btn-orange" bindtap="onAddRecord">新增待办事项</button>
+	</view>
+</view>
+

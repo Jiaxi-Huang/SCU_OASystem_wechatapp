@@ -122,6 +122,11 @@ Page({
           'text':'请假',
           'url':'leave'
         },
+        {
+          'icon':'./../../images/icon_32.png',
+          'text':'文件',
+          'url':'file'
+        },
       ],
       imgUrls: [
         '../../images/working.gif'

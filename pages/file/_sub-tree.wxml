@@ -1,0 +1,10 @@
+<block wx:for="{{children}}" wx:key="id">
+  <view class="folder-item sub-folder">
+    <text>{{item.name}}</text>
+    <block wx:if="{{item.children.length > 0}}">
+      <view class="sub-tree">
+        <include src="_sub-tree.wxml" data="{{children: item.children}}"></include>
+      </view>
+    </block>
+  </view>
+</block>
