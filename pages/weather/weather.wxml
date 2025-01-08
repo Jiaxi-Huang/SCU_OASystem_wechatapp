@@ -20,37 +20,37 @@
   <view class="data-grid">
     <!-- 气压 -->
     <view class="data-item">
-      <image src="../../images/wenhao.png" class="wenhao-icon" />
+      <image src="../../images/qiya.png" class="wenhao-icon" />
       <view class="data-label">气压</view>
       <view class="data-value">{{todayWeather.pressure}} hPa</view>
     </view>
     <!-- 最高温 -->
     <view class="data-item">
-      <image src="../../images/wenhao.png" class="wenhao-icon" />
+      <image src="../../images/gaowen.png" class="wenhao-icon" />
       <view class="data-label">最高温</view>
       <view class="data-value">{{todayWeather.high}}℃</view>
     </view>
     <!-- 最低温 -->
     <view class="data-item">
-      <image src="../../images/wenhao.png" class="wenhao-icon" />
+      <image src="../../images/diwen.png" class="wenhao-icon" />
       <view class="data-label">最低温</view>
       <view class="data-value">{{todayWeather.low}}℃</view>
     </view>
     <!-- 风向 -->
     <view class="data-item">
-      <image src="../../images/wenhao.png" class="wenhao-icon" />
+      <image src="../../images/fengxiang.png" class="wenhao-icon" />
       <view class="data-label">风向</view>
       <view class="data-value">{{todayWeather.win}}</view>
     </view>
     <!-- 风力 -->
     <view class="data-item">
-      <image src="../../images/wenhao.png" class="wenhao-icon" />
+      <image src="../../images/fengli.png" class="wenhao-icon" />
       <view class="data-label">风力</view>
       <view class="data-value">{{todayWeather.wind}}</view>
     </view>
     <!-- 能见度 -->
     <view class="data-item">
-      <image src="../../images/wenhao.png" class="wenhao-icon" />
+      <image src="../../images/nengjiandu.png" class="wenhao-icon" />
       <view class="data-label">能见度</view>
       <view class="data-value">{{todayWeather.visibility}}</view>
     </view>
