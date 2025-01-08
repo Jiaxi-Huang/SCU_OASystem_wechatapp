@@ -2,13 +2,46 @@ Page({
     data: {
       code: -1,  // 用于标识是否成功获取数据
       todayWeather: {},
-      city: '成都',  // 默认城市为成都
+      city: '',  // 初始城市为空
       weatherIcon: ''  // 天气图标路径
     },
   
     onLoad(options) {
-      // 页面加载时获取城市和天气数据
-      this.fetchWeather(this.data.city);
+      // 页面加载时获取用户所在城市
+      this.getCurrentCity();
+    },
+  
+    getCurrentCity() {
+      const that = this;
+      wx.request({
+        url: 'https://restapi.amap.com/v3/ip',
+        method: 'GET',
+        data: {
+          key: '112f7278845a2b4a727d04cffeb63b0b'  // 高德地图的API Key
+        },
+        success(res) {
+          console.log('City API response:', res.data);
+          if (res.data && typeof res.data.city === 'string') {
+            const city = res.data.city.replace('市', '');  // 去掉“市”字
+            that.setData({
+              city: city
+            });
+            that.fetchWeather(city);  // 获取城市后调用 fetchWeather 函数
+          } else {
+            console.error('City data is not a string:', res.data.city);
+            wx.showToast({
+              title: '获取城市信息失败',
+              icon: 'none'
+            });
+          }
+        },
+        fail() {
+          wx.showToast({
+            title: '请求城市数据失败，请检查网络连接',
+            icon: 'none'
+          });
+        }
+      });
     },
   
     search(e) {
