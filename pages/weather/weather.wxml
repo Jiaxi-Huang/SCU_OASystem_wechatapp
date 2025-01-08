@@ -8,18 +8,51 @@
 </view>
 <view class="main">
   <view class="info" wx:if="{{code === 0}}">
+    <!-- 天气图标 -->
+    <image src="{{weatherIcon}}" class="weather-icon" />
+    <!-- 温度 -->
     <view class="temp">{{todayWeather.low}}℃ ~ {{todayWeather.high}}℃</view>
+    <!-- 天气情况 -->
     <view class="type">{{todayWeather.weather}}</view>
-    <view class="city">{{todayWeather.city}}</view>
-    <view class="week">{{todayWeather.date}}</view>
-    <view class="weather">{{todayWeather.wind}}</view>
   </view>
-</view>
-<view class="divider"></view> <!-- 添加分隔线 -->
-<view class="previous-days" wx:if="{{previousDays.length > 0}}">
-  <view class="previous-day" wx:for="{{previousDays}}" wx:key="index">
-    <view class="date">{{item.date}}</view>
-    <view class="temp">{{item.low}}℃ ~ {{item.high}}℃</view>
-    <view class="type">{{item.weather}}</view>
+
+  <!-- 分块显示其他数据 -->
+  <view class="data-grid">
+    <!-- 气压 -->
+    <view class="data-item">
+      <image src="../../images/wenhao.png" class="wenhao-icon" />
+      <view class="data-label">气压</view>
+      <view class="data-value">{{todayWeather.pressure}} hPa</view>
+    </view>
+    <!-- 最高温 -->
+    <view class="data-item">
+      <image src="../../images/wenhao.png" class="wenhao-icon" />
+      <view class="data-label">最高温</view>
+      <view class="data-value">{{todayWeather.high}}℃</view>
+    </view>
+    <!-- 最低温 -->
+    <view class="data-item">
+      <image src="../../images/wenhao.png" class="wenhao-icon" />
+      <view class="data-label">最低温</view>
+      <view class="data-value">{{todayWeather.low}}℃</view>
+    </view>
+    <!-- 风向 -->
+    <view class="data-item">
+      <image src="../../images/wenhao.png" class="wenhao-icon" />
+      <view class="data-label">风向</view>
+      <view class="data-value">{{todayWeather.win}}</view>
+    </view>
+    <!-- 风力 -->
+    <view class="data-item">
+      <image src="../../images/wenhao.png" class="wenhao-icon" />
+      <view class="data-label">风力</view>
+      <view class="data-value">{{todayWeather.wind}}</view>
+    </view>
+    <!-- 能见度 -->
+    <view class="data-item">
+      <image src="../../images/wenhao.png" class="wenhao-icon" />
+      <view class="data-label">能见度</view>
+      <view class="data-value">{{todayWeather.visibility}}</view>
+    </view>
   </view>
 </view>
