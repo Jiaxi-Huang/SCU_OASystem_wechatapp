@@ -1,0 +1,43 @@
+<!--pages/reimbursement/reimbursement_info.wxml-->
+<view class="container container-gray">
+  <view class="group">
+    <view class="group-header">报销申请详情</view>
+    <view class="group-body">
+      <view class="input-list">
+        <view class="input-item">
+          <text class="input-item-label">报销编号</text>
+          <view class="input-item-content">
+            <text>{{record.reimbursement_id}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">金额</text>
+          <view class="input-item-content">
+            <text>{{record.amount}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">内容</text>
+          <view class="input-item-content">
+            <text>{{record.description}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">状态</text>
+          <view class="input-item-content">
+            <text>{{record.status}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">提交时间</text>
+          <view class="input-item-content">
+            <text>{{record.submitted_at}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="btn-submit">
+    <button class="btn-block btn-orange" bindtap="applySubmit">返回</button>
+  </view>
+</view>

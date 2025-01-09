@@ -1,301 +1,165 @@
+// pages/leave/leave_list.js
 Page({
   data: {
-    showsearch:false,   //显示搜索按钮
-    searchtext:'',  //搜索文字
-    filterdata:{},  //筛选条件数据
-    showfilter:false, //是否显示下拉筛选
-    showfilterindex:null, //显示哪个筛选类目
-    sortindex:0,  //一级分类索引
-    sortid:null,  //一级分类id
-    subsortindex:0, //二级分类索引
-    subsortid:null, //二级分类id
-    cityindex:0,  //一级城市索引
-    cityid:null,  //一级城市id
-    subcityindex:0,  //二级城市索引
-    subcityid:null, //二级城市id
-    servicelist:[], //服务集市列表
-    scrolltop:null, //滚动位置
-    page: 0,  //分页
-    isAdmin: false,
-    isMyLeaveShow: true,
-    isNotifyLeaveShow: false,
-    isReviewLeaveShow: false,
-    isAdminLeaveshow: false,
-    tableData: [], // 用来存储当前显示的表格数据
-    myData: [],
-    reviewData: [],
-    notifyData: [],
-    adminData: [],
+    showsearch: false,
+    searchtext: '',
+    filterdata: {},
+    showfilter: false,
+    showfilterindex: null,
+    statusindex: 0,
+    statusid: null,
+    leave_list: [],
+    filtered_list: [],
+    scrolltop: null,
   },
-  onLoad: function () { //加载数据渲染页面
-    this.fetchServiceData();
+
+  onLoad: function () {
     this.fetchFilterData();
-    this.getRole();
     this.getLeaveList();
   },
-  fetchFilterData:function(){ //获取筛选条件
-    this.setData({
-      filterdata:{
-        "sort": [],
-        "city": [],
-      }
-    })
-  },
-  fetchServiceData:function(){  //获取城市列表
-    let _this = this;
-    wx.showToast({
-      title: '加载中',
-      icon: 'loading'
-    })
-    const perpage = 10;
-    this.setData({
-      page:this.data.page+1
-    })
-    const page = this.data.page;
-    const newlist = [];
-    for (var i = (page-1)*perpage; i < page*perpage; i++) {
-      newlist.push({
-        "id":i+1,
-        "name":"上海拜特信息技术有限公司"+(i+1),
-        "city":"上海",
-        "tag":"法律咨询",
-        "imgurl":"http://img.mukewang.com/57fdecf80001fb0406000338-240-135.jpg"
-      })
-    }
-    setTimeout(()=>{
-      _this.setData({
-        servicelist:_this.data.servicelist.concat(newlist)
-      })
-    },1500)
-  },
-  getRole:function(){  //获取用户角色
-    let _this = this;
-    const accessToken = wx.getStorageSync('accessToken');
-    wx.request({
-      url: 'http://localhost:8080/api/leaveApproval/getRole',
-      method: 'POST',
-      data:{
-        accessToken: accessToken
-      },
-      success: function(res){
-        if(res.data.status == 0){
-          if(res.data.data[0] == 'admin'){
-            _this.setData({
-              isAdmin: true
-            })
-          }
-        }
-      }
-    })
-  },
-  getLeaveList: function() {
-    try {
-      const accessToken = {'accessToken':wx.getStorageSync('accessToken')}
-      // 获取我的请假记录
-      wx.request({
-        url: 'http://localhost:8080/api/leaveApproval/getMyLeaveRecord', 
-        method: 'POST',
-        data: accessToken,
-        success: (res) => {
-          if (res.data) {
-            this.setData({
-              myData: res.data.data.map(item => ({
-                leave_id: item.leave_id,
-                leave_user_id: item.user_id,
-                leave_review_user_id: item.review_user_id,
-                leave_start_time: item.start_date,
-                leave_end_time: item.end_date,
-                leave_type: item.type,
-                leave_reason: item.reason,
-                leave_status: item.status,
-                leave_submitted_at: item.submitted_at,
-              }))
-            });
-          } else {
-            console.log('postGetLeaveApproval RES MISS');
-          }
-        },
-        fail: (error) => {
-          console.log('请求失败:', error);
-        }
-      });
-      // 获取审批的请假记录
-      wx.request({
-        url: 'http://localhost:8080/api/leaveApproval/getReviewLeaveRecord', 
-        method: 'POST',
-        data: accessToken,
-        success: (res) => {
-          if (res.data.data) {
-            this.setData({
-              reviewData: res.data.data.map(item => ({
-                leave_id: item.leave_id,
-                leave_user_id: item.user_id,
-                leave_review_user_id: item.review_user_id,
-                leave_start_time: item.start_date,
-                leave_end_time: item.end_date,
-                leave_type: item.type,
-                leave_reason: item.reason,
-                leave_status: item.status,
-                leave_submitted_at: item.submitted_at,
-              }))
-            });
-          } else {
-            console.log('postGetLeaveApproval RES MISS');
-          }
-        },
-        fail: (error) => {
-          console.log('请求失败:', error);
-        }
-      });
-      // 获取抄送的请假记录
-      wx.request({
-        url: 'http://localhost:8080/api/leaveApproval/getNotifyLeaveRecord', 
-        method: 'POST',
-        data: accessToken,
-        success: (res) => {
-          if (res.data) {
-            this.setData({
-              notifyData: res.data.data.map(item => ({
-                leave_id: item.leave_id,
-                leave_user_id: item.user_id,
-                leave_review_user_id: item.review_user_id,
-                leave_start_time: item.start_date,
-                leave_end_time: item.end_date,
-                leave_type: item.type,
-                leave_reason: item.reason,
-                leave_status: item.status,
-                leave_submitted_at: item.submitted_at,
-              }))
-            });
-          } else {
-            console.log('postGetLeaveApproval RES MISS');
-          }
-        },
-        fail: (error) => {
-          console.log('请求失败:', error);
-        }
-      });
-      // 如果是管理员，获取管理员的请假记录
-      console.log("isAdmin: ", this.data.isAdmin);
-      if (this.data.isAdmin) {
-        console.log("管理员")
-        wx.request({
-          url: 'http://localhost:8080/api/leaveApproval/getAdminLeaveRecord', 
-          method: 'POST',
-          data: accessToken,
-          success: (res) => {
-            if (res.data) {
-              this.setData({
-                adminData: res.data.data.map(item => ({
-                  leave_id: item.leave_id,
-                  leave_user_id: item.user_id,
-                  leave_review_user_id: item.review_user_id,
-                  leave_start_time: item.start_date,
-                  leave_end_time: item.end_date,
-                  leave_type: item.type,
-                  leave_reason: item.reason,
-                  leave_status: item.status,
-                  leave_submitted_at: item.submitted_at,
-                }))
-              });
-              console.log("adminData: ", this.data.adminData);
-            } else {
-              console.log('postGetLeaveApproval RES MISS');
-            }
-          },
-          fail: (error) => {
-            console.log('请求失败:', error);
-          }
-        });
-      }
 
-    } catch (err) {
-      console.log('错误:', err.message);
-      wx.showToast({
-        title: '请求错误',
-        icon: 'none',
-        duration: 2000
+  fetchFilterData: function () {
+    this.setData({
+      filterdata: {
+        status: [
+          { id: 0, title: '未审核' },
+          { id: 1, title: '已通过' },
+          { id: 2, title: '未通过' },
+        ],
+      },
+    });
+  },
+
+  getLeaveList: function () {
+    const that = this;
+    wx.request({
+      url: 'http://localhost:8080/api/leaveApproval/getMyLeaveRecord',
+      method: 'POST',
+      data: {
+        accessToken: wx.getStorageSync('accessToken'),
+      },
+      success: function (res) {
+        if (res.statusCode === 200) {
+          that.setData({
+            leave_list: res.data.data,
+            filtered_list: res.data.data,
+          });
+        }
+      },
+    });
+  },
+
+  inputSearch: function (e) {
+    this.setData({
+      showsearch: e.detail.cursor > 0,
+      searchtext: e.detail.value,
+    });
+  },
+
+  submitSearch: function () {
+    const key = this.data.searchtext;
+    const temp_list = this.data.leave_list.filter((record) =>
+      record.leave_reason.includes(key)
+    );
+    this.setData({
+      filtered_list: temp_list,
+    });
+  },
+
+  setFilterPanel: function (e) {
+    const d = this.data;
+    const i = e.currentTarget.dataset.findex;
+    if (d.showfilterindex == i) {
+      this.setData({
+        showfilter: false,
+        showfilterindex: null,
+      });
+    } else {
+      this.setData({
+        showfilter: true,
+        showfilterindex: i,
       });
     }
   },
-  // 显示 "我的请假申请" 表格
-  showMyLeave: function() {
+
+  setStatusFilter: function (e) {
+    const dataset = e.currentTarget.dataset;
     this.setData({
-      isMyLeaveShow: true,
-      isReviewLeaveShow: false,
-      isNotifyLeaveShow: false,
-      isAdminLeaveShow: false,
-      tableData: this.data.myData // 设置当前表格的数据为 "我的请假申请" 数据
+      statusindex: dataset.statusindex,
+      statusid: dataset.statusid,
     });
-    // console.log("tableData: ", this.data.tableData);
-  },
-  // 显示 "我处理的请假申请" 表格
-  showReviewLeave: function() {
+    const key = this.data.filterdata.status[dataset.statusindex].title;
+    const temp_list = this.data.leave_list.filter(
+      (record) => record.leave_status === key
+    );
     this.setData({
-      isMyLeaveShow: false,
-      isReviewLeaveShow: true,
-      isNotifyLeaveShow: false,
-      isAdminLeaveShow: false,
-      tableData: this.data.reviewData // 设置当前表格的数据为 "我处理的请假申请" 数据
+      filtered_list: temp_list,
     });
   },
-  // 显示 "抄送给我的请假申请" 表格
-  showNotifyLeave: function() {
+
+  hideFilter: function () {
     this.setData({
-      isMyLeaveShow: false,
-      isReviewLeaveShow: false,
-      isNotifyLeaveShow: true,
-      isAdminLeaveShow: false,
-      tableData: this.data.notifyData // 设置当前表格的数据为 "抄送给我的请假申请" 数据
+      showfilter: false,
+      showfilterindex: null,
     });
   },
-  // 显示 "管理员请假记录" 表格
-  showAdminLeave: function() {
+
+  scrollHandle: function (e) {
     this.setData({
-      isMyLeaveShow: false,
-      isReviewLeaveShow: false,
-      isNotifyLeaveShow: false,
-      isAdminLeaveShow: true,
-      tableData: this.data.adminData // 设置当前表格的数据为 "管理员请假记录" 数据
+      scrolltop: e.detail.scrollTop,
     });
   },
-  addLeave: function() {
-    navigator.navigateTo({
-      url: '/pages/leave/addLeave/addLeave'
-    })
-  },
-  inputSearch:function(e){  //输入搜索文字
+
+  goToTop: function () {
     this.setData({
-      showsearch:e.detail.cursor>0,
-      searchtext:e.detail.value
-    })
+      scrolltop: 0,
+    });
   },
-  submitSearch:function(){  //提交搜索
-    console.log(this.data.searchtext);
-    this.fetchServiceData();
+
+  onAddRecord: function () {
+    wx.navigateTo({
+      url: 'leave_add',
+    });
   },
-  scrollHandle:function(e){ //滚动事件
-    this.setData({
-      scrolltop:e.detail.scrollTop
-    })
+
+  onModifyRecord: function (e) {
+    const record = JSON.stringify(e.target.dataset.record);
+    wx.navigateTo({
+      url: 'leave_modify?record=' + record,
+    });
   },
-  goToTop:function(){ //回到顶部
-    this.setData({
-      scrolltop:0
-    })
+
+  onInfo: function (e) {
+    const record = JSON.stringify(e.target.dataset.record);
+    wx.navigateTo({
+      url: 'leave_info?record=' + record,
+    });
   },
-  scrollLoading:function(){ //滚动加载
-    this.fetchServiceData();
+
+  onDeleteRecord: function (e) {
+    const leave_id = e.target.dataset.leave_id;
+    wx.showModal({
+      title: '提示',
+      content: '确认要删除该请假记录吗？',
+      success: function (res) {
+        if (res.confirm) {
+          wx.request({
+            url: 'http://localhost:8080/api/leaveApproval/deleteLeaveRecord',
+            method: 'POST',
+            data: {
+              leave_id: leave_id,
+            },
+            success: function (res) {
+              if (res.statusCode === 200) {
+                wx.showToast({
+                  title: '删除成功',
+                });
+                that.getLeaveList();
+              }
+            },
+          });
+        }
+      },
+    });
   },
-  onPullDownRefresh:function(){ //下拉刷新
-    this.setData({
-      page:0,
-      servicelist:[]
-    })
-    this.fetchServiceData();
-    this.fetchFilterData();
-    setTimeout(()=>{
-      wx.stopPullDownRefresh()
-    },1000)
-  }
-})
+});

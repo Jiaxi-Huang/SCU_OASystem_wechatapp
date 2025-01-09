@@ -1,0 +1,49 @@
+<!--pages/leave/leave_info.wxml-->
+<view class="container container-gray">
+  <view class="group">
+    <view class="group-header">请假申请详情</view>
+    <view class="group-body">
+      <view class="input-list">
+        <view class="input-item">
+          <text class="input-item-label">请假编号</text>
+          <view class="input-item-content">
+            <text>{{record.leave_id}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">请假原因</text>
+          <view class="input-item-content">
+            <text>{{record.leave_reason}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">请假类型</text>
+          <view class="input-item-content">
+            <text>{{record.leave_type}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">开始时间</text>
+          <view class="input-item-content">
+            <text>{{record.leave_start_time}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">结束时间</text>
+          <view class="input-item-content">
+            <text>{{record.leave_end_time}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">状态</text>
+          <view class="input-item-content">
+            <text>{{record.leave_status}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="btn-submit">
+    <button class="btn-block btn-orange" bindtap="applySubmit">返回</button>
+  </view>
+</view>

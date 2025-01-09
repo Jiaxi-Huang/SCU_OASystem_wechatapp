@@ -1,0 +1,49 @@
+<!--pages/leave/leave_add.wxml-->
+<view class="container container-gray">
+  <view class="group">
+    <view class="group-header">请假申请添加</view>
+    <view class="group-body">
+      <view class="input-list">
+        <view class="input-item">
+          <text class="input-item-label">请假原因</text>
+          <view class="input-item-content">
+            <input type="text" bindinput="inputChange" data-field="leave_reason"></input>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">请假类型</text>
+          <view class="input-item-content">
+            <picker mode="selector" range="{{leave_type_options}}" bindchange="typeChange">
+              <view class="picker">{{leave_type_options[typeIndex]}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">开始时间</text>
+          <view class="input-item-content">
+            <picker mode="date" bindchange="startDateChange">
+              <view class="picker">{{startDate}}</view>
+            </picker>
+            <picker mode="time" bindchange="startTimeChange">
+              <view class="picker">{{startTime}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">结束时间</text>
+          <view class="input-item-content">
+            <picker mode="date" bindchange="endDateChange">
+              <view class="picker">{{endDate}}</view>
+            </picker>
+            <picker mode="time" bindchange="endTimeChange">
+              <view class="picker">{{endTime}}</view>
+            </picker>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="btn-submit">
+    <button class="btn-block btn-orange" bindtap="applySubmit">提交</button>
+  </view>
+</view>

@@ -1,66 +1,165 @@
-// pages/reimbursement/reimbursement.js
+// pages/reimbursement/reimbursement_list.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    showsearch: false,
+    searchtext: '',
+    filterdata: {},
+    showfilter: false,
+    showfilterindex: null,
+    statusindex: 0,
+    statusid: null,
+    reimbursement_list: [],
+    filtered_list: [],
+    scrolltop: null,
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  onLoad: function () {
+    this.fetchFilterData();
+    this.getReimbursementList();
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  fetchFilterData: function () {
+    this.setData({
+      filterdata: {
+        status: [
+          { id: 0, title: '未审核' },
+          { id: 1, title: '已通过' },
+          { id: 2, title: '未通过' },
+        ],
+      },
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  getReimbursementList: function () {
+    const that = this;
+    wx.request({
+      url: 'http://localhost:8080/api/reimbursement/getReimbursementList',
+      method: 'POST',
+      data: {
+        accessToken: wx.getStorageSync('accessToken'),
+      },
+      success: function (res) {
+        if (res.statusCode === 200) {
+          that.setData({
+            reimbursement_list: res.data.data,
+            filtered_list: res.data.data,
+          });
+        }
+      },
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  inputSearch: function (e) {
+    this.setData({
+      showsearch: e.detail.cursor > 0,
+      searchtext: e.detail.value,
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
+  submitSearch: function () {
+    const key = this.data.searchtext;
+    const temp_list = this.data.reimbursement_list.filter((record) =>
+      record.description.includes(key)
+    );
+    this.setData({
+      filtered_list: temp_list,
+    });
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
+  setFilterPanel: function (e) {
+    const d = this.data;
+    const i = e.currentTarget.dataset.findex;
+    if (d.showfilterindex == i) {
+      this.setData({
+        showfilter: false,
+        showfilterindex: null,
+      });
+    } else {
+      this.setData({
+        showfilter: true,
+        showfilterindex: i,
+      });
+    }
   },
 
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
+  setStatusFilter: function (e) {
+    const dataset = e.currentTarget.dataset;
+    this.setData({
+      statusindex: dataset.statusindex,
+      statusid: dataset.statusid,
+    });
+    const key = this.data.filterdata.status[dataset.statusindex].title;
+    const temp_list = this.data.reimbursement_list.filter(
+      (record) => record.status === key
+    );
+    this.setData({
+      filtered_list: temp_list,
+    });
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
+  hideFilter: function () {
+    this.setData({
+      showfilter: false,
+      showfilterindex: null,
+    });
+  },
 
-  }
-})
+  scrollHandle: function (e) {
+    this.setData({
+      scrolltop: e.detail.scrollTop,
+    });
+  },
+
+  goToTop: function () {
+    this.setData({
+      scrolltop: 0,
+    });
+  },
+
+  onAddRecord: function () {
+    wx.navigateTo({
+      url: 'reimbursement_add',
+    });
+  },
+
+  onModifyRecord: function (e) {
+    const record = JSON.stringify(e.target.dataset.record);
+    wx.navigateTo({
+      url: 'reimbursement_modify?record=' + record,
+    });
+  },
+
+  onInfo: function (e) {
+    const record = JSON.stringify(e.target.dataset.record);
+    wx.navigateTo({
+      url: 'reimbursement_info?record=' + record,
+    });
+  },
+
+  onDeleteRecord: function (e) {
+    const reimbursement_id = e.target.dataset.reimbursement_id;
+    wx.showModal({
+      title: '提示',
+      content: '确认要删除该报销记录吗？',
+      success: function (res) {
+        if (res.confirm) {
+          wx.request({
+            url: 'http://localhost:8080/api/reimbursement/deleteReimbursementRecord',
+            method: 'POST',
+            data: {
+              reimbursement_id: reimbursement_id,
+            },
+            success: function (res) {
+              if (res.statusCode === 200) {
+                wx.showToast({
+                  title: '删除成功',
+                });
+                that.getReimbursementList();
+              }
+            },
+          });
+        }
+      },
+    });
+  },
+});

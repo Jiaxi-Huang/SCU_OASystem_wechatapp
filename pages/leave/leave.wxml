@@ -1,40 +1,50 @@
+<!--pages/leave/leave_list.wxml-->
 <view class="container">
-	<view class="search-flex {{scrolltop>200?'tophide':''}}">
-		<view class="search-bar">
-			<input type="text" maxlength="12" placeholder="请输入关键字查询" bindinput="inputSearch"></input>
-			<button class="search-btn" bindtap="submitSearch" wx:if="{{showsearch}}">搜索</button>
-		</view>
-		<button class="search-extra-btn" bindtap="addLeave">请假申请</button>
-	</view>
-    <view>
-        <button class=".btn-orange" bindtap="showMyLeave">我的请假</button>
-        <button class=".btn-orange" bindtap="showReviewLeave">我处理的请假</button>
-        <button class=".btn-orange" bindtap="showNotifyLeave">抄送我的请假</button>
-        <button class=".btn-orange" bindtap="showAdminLeave" wx:if="{{isAdmin}}">所有请假</button>
+  <view class="btn-submit">
+    <button class="btn-block btn-orange" bindtap="onAddRecord">新增请假申请</button>
+  </view>
+	
+  <view class="search-flex {{scrolltop>200?'tophide':''}}">
+    <view class="search-bar">
+      <input type="text" maxlength="12" placeholder="请输入标题关键查询" bindinput="inputSearch"></input>
+      <button class="search-btn" bindtap="submitSearch" wx:if="{{showsearch}}">搜索</button>
     </view>
-	<scroll-view class="container-body" scroll-y="true" scroll-top="{{scrolltop}}" bindscroll="scrollHan dle" lower-threshold="50" bindscrolltolower="scrollLoading">
-		<view class="leave-list">
-			<navigator class="leave-item" wx:for="{{tableData}}" wx:key="{{item.leave_id}}" url="leaveModify?id={{item.leave_id}}">
-				<view class="leave-text">
-					<view class="leave-tite">{{item.leave_reason}}</view>
-					<view class="leave-tags">
-						<text>{{item.leave_type}}</text>
-					</view>
-                    <view class="leave-tags">
-						<text>{{item.leave_status}}</text>
-					</view>
-                    <view>
-					<text class="leave-city">提交用户ID：{{item.leave_user_id}}</text>
-					</view>
-                    <view>
-					<text class="leave-city">开始时间：{{item.leave_start_time}}</text>
-					</view>
-                    <view>
-                    <text class="leave-city">结束时间：{{item.leave_end_time}}</text>
-                    </view>
-                </view>
-			</navigator>
-		</view>
-		<view class="gototop {{scrolltop>200?'active':''}}" bindtap="goToTop"></view>
-	</scroll-view>
+    <button class="search-extra-btn" bindtap='refresh'>刷新</button>
+  </view>
+
+  <view class="filter-flex">
+    <view class="filter-tab">
+      <text bindtap="setFilterPanel" data-findex="1" class="{{showfilterindex==1?'active':''}}">筛选</text>
+    </view>
+    <view class="filter-content" wx:if="{{showfilter}}">
+      <view class="filter-panel" wx:if="{{showfilterindex==1}}">
+        <view class="filter-panel-left">
+          <view wx:for="{{filterdata.status}}" wx:key="{{item.id}}" bindtap="setStatusFilter" data-statusindex="{{index}}" data-statusid="{{item.id}}" class="{{statusindex==index?'active':''}}">{{item.title}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="filter-shadow" wx:if="{{showfilter}}" bindtap="hideFilter"></view>
+  </view>
+
+  <scroll-view class="container-body" scroll-y="true" scroll-top="{{scrolltop}}" bindscroll="scrollHandle" lower-threshold="50" bindscrolltolower="scrollLoading">
+    <view class="leave-list">
+      <view class="leave-item" wx:for="{{filtered_list}}" wx:key="{{item.leave_id}}">
+        <view class="leave-text">
+          <view class="leave-title">{{item.leave_reason}}</view>
+          <view class="leave-tags">
+            <text>请假编号：{{item.leave_id}}</text>
+            <text>类型：{{item.leave_type}}</text>
+          </view>
+          <text class="leave-status">状态：{{item.leave_status}}</text>
+          <view class="leave-tags">
+            <text bindtap="onDeleteRecord" data-leave_id="{{item.leave_id}}">删除</text>
+            <text bindtap="onModifyRecord" data-record="{{item}}">修改</text>
+            <text bindtap="onInfo" data-record="{{item}}">详情</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="gototop {{scrolltop>200?'active':''}}" bindtap="goToTop"></view>
+  </scroll-view>
+
 </view>

@@ -1,1 +1,100 @@
-/* pages/reimbursement/reimbursement.wxss */
+/* pages/reimbursement/reimbursement_list.wxss */
+.container {
+  padding: 20rpx;
+}
+
+.search-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.search-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.search-btn {
+  margin-left: 20rpx;
+}
+
+.filter-flex {
+  margin-bottom: 20rpx;
+}
+
+.filter-tab {
+  display: flex;
+  justify-content: space-around;
+}
+
+.filter-content {
+  position: relative;
+}
+
+.filter-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  z-index: 100;
+}
+
+.filter-shadow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+}
+
+.reimbursement-list {
+  padding: 0 20rpx;
+}
+
+.reimbursement-item {
+  display: flex;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #e8e8e8;
+}
+
+.reimbursement-text {
+  flex: 1;
+  margin-left: 20rpx;
+}
+
+.reimbursement-title {
+  color: #333;
+  font-size: 34rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reimbursement-tags {
+  margin: 6rpx 0;
+}
+
+.reimbursement-tags text {
+  padding: 6rpx 16rpx;
+  border: 1rpx solid #f7982a;
+  line-height: 1;
+  color: #f7982a;
+  font-size: 28rpx;
+  border-radius: 4rpx;
+  margin-right: 10rpx;
+  margin-bottom: 10rpx;
+  white-space: nowrap;
+}
+
+.reimbursement-status {
+  color: #666;
+}
+
+.btn-submit {
+  margin-top: 20rpx;
+}

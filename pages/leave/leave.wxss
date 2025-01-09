@@ -1,46 +1,100 @@
-.leave-list{
-	padding: 0 20rpx;
+/* pages/leave/leave_list.wxss */
+.container {
+  padding: 20rpx;
 }
-.leave-item{
-	display: flex;
-	padding: 20rpx 0; 
-	border-bottom: 1rpx solid #e8e8e8;
+
+.search-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
 }
-.leave-img{
-	width: 220rpx;
-	height: 156rpx;
+
+.search-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
 }
-.leave-item image{
-	width: 220rpx;
-	height: 156rpx;
+
+.search-btn {
+  margin-left: 20rpx;
 }
-.leave-text{
-	flex: 1;
-	margin-left: 20rpx;
-	width: 100%;
+
+.filter-flex {
+  margin-bottom: 20rpx;
 }
-.leave-text .leave-tite{
-	color: #333;
-	width: 100%;
-	font-size: 34rpx;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+
+.filter-tab {
+  display: flex;
+  justify-content: space-around;
 }
-.leave-tags{
-	margin: 6rpx 0;
+
+.filter-content {
+  position: relative;
 }
-.leave-tags text{
-	padding: 6rpx 16rpx;
-	border: 1rpx solid #f7982a;
-	line-height: 1;
-	color: #f7982a;
-	font-size: 28rpx;
-	border-radius: 4rpx;
-	margin-right: 10rpx;
-	margin-bottom: 10rpx;
-	white-space: nowrap;
+
+.filter-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  z-index: 100;
 }
-.leave-city{
-	color: #666;
+
+.filter-shadow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+}
+
+.leave-list {
+  padding: 0 20rpx;
+}
+
+.leave-item {
+  display: flex;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #e8e8e8;
+}
+
+.leave-text {
+  flex: 1;
+  margin-left: 20rpx;
+}
+
+.leave-title {
+  color: #333;
+  font-size: 34rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.leave-tags {
+  margin: 6rpx 0;
+}
+
+.leave-tags text {
+  padding: 6rpx 16rpx;
+  border: 1rpx solid #f7982a;
+  line-height: 1;
+  color: #f7982a;
+  font-size: 28rpx;
+  border-radius: 4rpx;
+  margin-right: 10rpx;
+  margin-bottom: 10rpx;
+  white-space: nowrap;
+}
+
+.leave-status {
+  color: #666;
+}
+
+.btn-submit {
+  margin-top: 20rpx;
 }
