@@ -86,14 +86,13 @@ Page({
             method: 'POST',
             data:{
               acsTkn: wx.getStorageSync('accessToken'),
-              dirId:0,
+              dirId:record.dirId,
               id:record.id,
               fileName:record.fileName
             },
             success:function(res) {
-              let pages = getCurrentPages(); //获取小程序页面栈
-              pages[pages.length -2].goBackUpdateInfo(); //使用上个页面的实例对象的方法
-              wx.navigateBack();
+              console.log(res.data)
+              
             },
             fail:function(res) {
               console.log("Modify失败");
@@ -104,7 +103,7 @@ Page({
             method: 'POST',
             data:{
               acsTkn: wx.getStorageSync('accessToken'),
-              beforeDirId:0,
+              beforeDirId:record.dirId,
               ids:[record.id],
               remark:record.remark
             },
@@ -112,6 +111,22 @@ Page({
               let pages = getCurrentPages(); //获取小程序页面栈
               pages[pages.length -2].goBackUpdateInfo(); //使用上个页面的实例对象的方法
               wx.navigateBack();
+              if(res.data.status===-1){
+                console.log("status1")
+                wx.showToast({
+                  title: '等级权限不够 无法修改！',
+                  icon: 'none',
+                  duration: 2000//持续的时间
+                })
+              }
+              if(res.data.status===0){
+                console.log("status0")
+                wx.showToast({
+                  title: '成功',
+                  icon: 'success',
+                  duration: 2000//持续的时间
+                })
+              }
             },
             fail:function(res) {
               console.log("Modify失败");

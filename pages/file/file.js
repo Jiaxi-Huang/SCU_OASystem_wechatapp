@@ -5,7 +5,7 @@ Page({
     searchtext:'',  //搜索文字
     filterdata:{},  //筛选条件数据
     showfilter:true, //是否显示下拉筛选
-    showfilterindex:0, //显示哪个筛选类目
+    showfilterindex:1, //显示哪个筛选类目
     sortindex:0,  //一级分类索引
     sortid:null,  //一级分类id
     subsortindex:0, //二级分类索引
@@ -20,7 +20,13 @@ Page({
     file_list:[],
     flitered_list:[],
     uploadimgs: [],
-    userDepartment:''
+    userDepartment:'',
+    folderId:0,
+    personal_list:[],
+    department_list:[],
+    company_list:[],
+    count:0,
+    userId:0,
   
   },
   onLoad: function () { //加载数据渲染页面
@@ -31,7 +37,7 @@ Page({
   },
   refresh:function(){ //获取筛选条件
     this.setData({
-      flitered_list: this.data.file_list,
+      flitered_list: this.data.personal_list,
     })
   },
   fetchFilterData:function(){ //获取筛选条件
@@ -56,12 +62,31 @@ Page({
     const key = _this.data.searchtext;
     console.log(key);
     let temp_list = [];
-    _this.data.file_list.forEach(record => {
-      if (record.fileName.includes(key)) {
-        console.log(record.fileName + "ok");
-        temp_list.push(record);
-      }
-    });
+    if(_this.data.folderId===0){
+      _this.data.personal_list.forEach(record => {
+        if (record.fileName.includes(key)) {
+          console.log(record.fileName + "ok");
+          temp_list.push(record);
+        }
+      });
+    }
+    if(_this.data.folderId===1){
+      _this.data.department_list.forEach(record => {
+        if (record.fileName.includes(key)) {
+          console.log(record.fileName + "ok");
+          temp_list.push(record);
+        }
+      });
+    }
+    if(_this.data.folderId===2){
+      _this.data.company_list.forEach(record => {
+        if (record.fileName.includes(key)) {
+          console.log(record.fileName + "ok");
+          temp_list.push(record);
+        }
+      });
+    }
+    
     _this.setData({
       flitered_list: temp_list
     })
@@ -100,6 +125,9 @@ Page({
     let that=this
     let department="";
     let is_shared;
+    this.setData({
+      folderId:dataset.sortid
+    })
     if(dataset.sortid === 0){
       department=null;
       is_shared=0;
@@ -116,15 +144,63 @@ Page({
     let temp_list = [];
     let _this = this;
     _this.data.file_list.forEach(record => {
-      if (record.department === department && record.isShared === is_shared) {
-        console.log(record.id + "ok");
-        temp_list.push(record);
+      if(dataset.sortid === 0){
+        if (record.department === department && record.isShared === is_shared && record.userId === that.data.userId) {
+          console.log(record.id + "ok");
+          temp_list.push(record);
+        }
+      }else{
+        if (record.department === department && record.isShared === is_shared) {
+          console.log(record.id + "ok");
+          temp_list.push(record);
+        }
       }
+      
+      
     });
     _this.setData({
       flitered_list: temp_list
     })
   },
+  // setSortIndex:function(){
+  //   let dataset = {
+  //     sortid:0
+  //   }
+  //   console.log(dataset)
+  //   this.setData({
+  //     showfilter: 0,
+  //   })
+  //   let that=this
+  //   let department="";
+  //   let is_shared;
+  //   this.setData({
+  //     folderId:dataset.sortid
+  //   })
+  //   if(dataset.sortid === 0){
+  //     department=null;
+  //     is_shared=0;
+  //   }
+  //   if(dataset.sortid === 1){
+  //     department=that.data.userDepartment;
+  //     is_shared=0;
+  //   }
+  //   if(dataset.sortid === 2){
+  //     department=null;
+  //     is_shared=1;
+  //   }
+
+  //   let temp_list = [];
+  //   let _this = this;
+  //   _this.data.file_list.forEach(record => {
+  //     if (record.department === department && record.isShared === is_shared) {
+  //       console.log(record.id + "ok");
+  //       temp_list.push(record);
+  //     }
+  //   });
+  //   _this.setData({
+  //     flitered_list: temp_list
+  //   })
+  // },
   setSubsortIndex:function(e){ //服务类别二级索引
     const dataset = e.currentTarget.dataset;
     this.setData({
@@ -181,7 +257,7 @@ Page({
       wx.stopPullDownRefresh()
     },1000)
   },
-  getTodoRecord:function() {
+  getTodoRecord:function(i=0) {
     let that = this;
     // console.log("执行到getTodoRecord了");
     wx.getStorage({
@@ -197,7 +273,9 @@ Page({
           method: 'POST',
           success:function(res) {
             console.log("records get!");
-            that.handleGetTodoResult(res);
+            
+            that.handleGetTodoResult(res,i);
+            //that.setSortIndex();
           },
           fail:function(res) {
               
@@ -210,62 +288,133 @@ Page({
       }
     });
   },
-  handleGetTodoResult:function(res) {
+
+
+  handleGetTodoResult:function(res,i) {
     // console.log("执行到handleGetTodoResult了");
     let that = this;
     // 使用 setData 更新 todo_list 并确保图片路径正确
     this.setData({
-      userDepartment:res.data.data.pop()
+      userDepartment:res.data.data.pop(),
+      userId:res.data.data.pop()
     })
     console.log(that.data.userDepartment)
     res.data.data.pop();
-    res.data.data.pop();
     console.log(res.data.data);
+    const personnalFile = res.data.data.filter(item => item.department === null && item.isShared   === 0 && item.userId === that.data.userId);
+    const departmentFile = res.data.data.filter(item => item.department === that.data.userDepartment && item.isShared   === 0 );
+    const companyFile = res.data.data.filter(item => item.department === null && item.isShared   === 1 );
     that.setData({
-      
+      personal_list: personnalFile,
+      department_list:departmentFile,
+      company_list:companyFile,
       file_list: res.data.data.map(item => {
 
-        if(item.size >= 1024 * 1024 * 1024){
-          item.size = Math.round(item.size / (1024 * 1024 * 1024) * 10) / 10 + "GB"
-        }else if(item.size >= 1024 * 1024){
-          item.size = Math.round(item.size / (1024 * 1024) * 10) / 10 + "MB"
-        }else if(item.size >= 1024){
-          item.size = Math.round(item.size / 1024  * 10) / 10 + "KB"
-        }else{
-          item.size = item.size + "字节"
-        }
+// 假设原始时间字符串为 timeStr
+let timeStr = item.createTime;
+// 分割字符串获取各个部分
+let parts = timeStr.split("T");
+let dateParts = parts[0].split("-");
+let timeParts = parts[1].split(":");
+let year = parseInt(dateParts[0]);
+let month = parseInt(dateParts[1]) - 1; // 注意 JavaScript 中月份是从 0 开始计数
+let day = parseInt(dateParts[2]);
+let hour = parseInt(timeParts[0]);
+let minute = parseInt(timeParts[1]);
+let second = parseInt(timeParts[2].split(".")[0]);
+// 创建 Date 对象
+let date = new Date(year, month, day, hour, minute, second);
+// 使用 toLocaleString 方法进行格式化（会根据用户本地设置格式化）
+let formattedDate = date.toLocaleString(); 
+item.createTime=formattedDate;
 
-        if(item.ext === "jpg"||item.ext === "png"){
-          item.imageUrl = item.url
-        }
-        else if(item.ext === "docx"||item.ext === "doc"){
-          item.imageUrl = "/images/doc.jpg"
-        }
-        else if(item.ext === "pptx"){
-          item.imageUrl = "/images/pptx.jpg"
-        }
-        else if(item.ext === "pdf"){
-          item.imageUrl = "/images/pdf.jpg"
-        }
-        else if(item.ext === "xls"||item.ext === "xlsx"){
-          item.imageUrl = "/images/excel.jpg"
-        }
-        else if(item.ext === "txt"){
-          item.imageUrl = "/images/txt.jpg"
-        }
-        else if(item.ext === "rar"||item.ext === "zip"||item.ext === "7z"){
-          item.imageUrl = "/images/rar.jpg"
-        }
-        else{
-          item.imageUrl = "/images/unknown.jpg"
-        }
+
+// 假设原始时间字符串为 timeStr
+timeStr = item.updateTime;
+// 分割字符串获取各个部分
+parts = timeStr.split("T");
+dateParts = parts[0].split("-");
+timeParts = parts[1].split(":");
+year = parseInt(dateParts[0]);
+month = parseInt(dateParts[1]) - 1; // 注意 JavaScript 中月份是从 0 开始计数
+day = parseInt(dateParts[2]);
+hour = parseInt(timeParts[0]);
+minute = parseInt(timeParts[1]);
+second = parseInt(timeParts[2].split(".")[0]);
+// 创建 Date 对象
+date = new Date(year, month, day, hour, minute, second);
+// 使用 toLocaleString 方法进行格式化（会根据用户本地设置格式化）
+formattedDate = date.toLocaleString(); 
+item.updateTime=formattedDate;
+
         
-        return item;
+          if(item.size >= 1024 * 1024 * 1024){
+            item.size = Math.round(item.size / (1024 * 1024 * 1024) * 10) / 10 + "GB"
+          }else if(item.size >= 1024 * 1024){
+            item.size = Math.round(item.size / (1024 * 1024) * 10) / 10 + "MB"
+          }else if(item.size >= 1024){
+            item.size = Math.round(item.size / 1024  * 10) / 10 + "KB"
+          }else{
+            item.size = item.size + "字节"
+          }
+
+
+
+  
+          if(item.ext === "jpg"||item.ext === "png"){
+            item.imageUrl = item.url
+          }
+          else if(item.ext === "docx"||item.ext === "doc"){
+            item.imageUrl = "/images/doc.jpg"
+          }
+          else if(item.ext === "pptx"){
+            item.imageUrl = "/images/pptx.jpg"
+          }
+          else if(item.ext === "pdf"){
+            item.imageUrl = "/images/pdf.jpg"
+          }
+          else if(item.ext === "xls"||item.ext === "xlsx"){
+            item.imageUrl = "/images/excel.jpg"
+          }
+          else if(item.ext === "txt"){
+            item.imageUrl = "/images/txt.jpg"
+          }
+          else if(item.ext === "rar"||item.ext === "zip"||item.ext === "7z"){
+            item.imageUrl = "/images/rar.jpg"
+          }
+          else{
+            item.imageUrl = "/images/unknown.jpg"
+          }
+          
+          return item;
       }),
     }, () => {
-      that.setData({
-        flitered_list: that.data.file_list,
-      })
+      if(that.data.count===0){
+        that.setData({
+          flitered_list: that.data.personal_list,
+          count:1
+        })
+      }else{
+        that.setData({
+          flitered_list: that.data.file_list
+        })
+      }
+      if(i===0){
+        that.setData({
+          flitered_list: that.data.personal_list,
+        })
+      }
+      if(i===1){
+        that.setData({
+          flitered_list: that.data.department_list,
+        })
+      }
+      if(i===2){
+        that.setData({
+          flitered_list: that.data.company_list,
+        })
+      }
+     
     });
   },
   
@@ -299,11 +448,32 @@ Page({
             method: 'POST',
             data:{
               acsTkn: wx.getStorageSync('accessToken'),
-              beforeDirId:0,
+              beforeDirId:-that.data.folderId,
               ids:[id]       
             },
             success:function(res) {
-              that.getTodoRecord();
+              console.log(res)
+              if(res.data.status===-1){
+                wx.showToast({
+                  title: '等级权限不够 无法删除！',
+                  icon: 'none',
+                  duration: 2000//持续的时间
+                })
+              }
+              if(res.data.status===0){
+                wx.showToast({
+                  title: '成功',
+                  icon: 'success',
+                  duration: 2000//持续的时间
+                })
+              }
+              console.log("wufashanchu")
+              that.setData({
+                count:0
+              })
+              let i=that.data.folderId
+              console.log(i)
+              that.getTodoRecord(i);
             },
             fail:function(res) {
               console.log("失败");
@@ -345,27 +515,28 @@ Page({
             name: 'file',
             formData: {
               'fileName':tempFilePaths[i].name,
-              'folder_id':0,
+              'folder_id':-that.data.folderId,
               'accessToken': wx.getStorageSync('accessToken'),
                    },
-            success: function (resp) {
-              console.log(resp)
-              var data = JSON.parse(resp.data)
+            success: function (res) {
+              console.log(res)
+              var data = JSON.parse(res.data)
               console.log(data)
-              if (data.code == 200) {
+              if (data.status === 0) {
                 wx.showToast({
                   title: '上传成功',
-                  icon: 'none',
+                  icon: 'success',
                   duration: 1300
                 })
               } else {
                 wx.showToast({
-                  title: data.message,
+                  title: '等级权限不够，无法上传',
                   icon: 'none',
                   duration: 2000
                 })
               }
-              that.getTodoRecord();
+              let i =that.data.folderId
+              that.getTodoRecord(i);
             },
             fail: function (err) {
               console.log(err)
