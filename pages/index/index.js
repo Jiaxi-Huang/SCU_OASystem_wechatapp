@@ -127,6 +127,11 @@ Page({
           'text':'文件',
           'url':'file'
         },
+        {
+            'icon':'./../../images/icon_32.png',
+            'text':'考勤',
+            'url':'attendance'
+        },
       ],
       imgUrls: [
         '../../images/working.gif'
