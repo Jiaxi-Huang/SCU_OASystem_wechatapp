@@ -21,6 +21,8 @@
     "pages/meeting/meeting_crt",
     "pages/meeting/meeting_add",
     "pages/file/file",
+    "pages/file/file_modify",
+    "pages/file/file_info",
     "pages/spacereserve/spacereserve",
     "pages/service/service",
     "pages/servicedetail/servicedetail",
@@ -52,8 +54,8 @@
     "pages/map/map_location",
     "pages/map/map_menu",
     "pages/map/map_monitor",
-    "pages/map/map_test",
-    "pages/file/_sub-tree"
+    "pages/map/map_test"
+
   ],
   "window": {
     "backgroundTextStyle": "dark",

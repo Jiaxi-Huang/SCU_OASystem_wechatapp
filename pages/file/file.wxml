@@ -9,34 +9,14 @@
 		<button class="search-extra-btn" bindtap='refresh'>刷新</button>
 	</view>
 
-
-
-
-
-
-  <view class="tree-container">
-  <block wx:for="{{treeData}}" wx:key="id">
-    <view class="folder-item">
-      <text>{{item.name}}</text>
-      <block wx:if="{{item.children.length > 0}}">
-        <view class="sub-tree">
-          <include src="_sub-tree.wxml" data="{{children: item.children}}"></include>
-        </view>
-      </block>
-    </view>
-  </block>
-</view>
-<import src="_sub-tree.wxml" />
-
-
-
-
-
+  <view class="btn-submit">
+		<button class="btn-block btn-orange" bindtap="onAddRecord">上传文件</button>
+	</view>
 	<scroll-view class="container-body" scroll-y="true" scroll-top="{{scrolltop}}" bindscroll="scrollHandle" lower-threshold="50" bindscrolltolower="scrollLoading" >
 		<view class="service-list">
 			<navigator class="service-item" wx:for="{{flitered_list}}" wx:key="{{item.id}}">
 				<view class="service-img">
-					<image src="{{item.url}}" mode="objectFill" 
+					<image src="{{item.imageUrl}}" mode="objectFill" 
           bindtap="onStatusChange" data-record="{{item}}"></image>
 				</view>
 				<view class="service-text" >
@@ -58,8 +38,6 @@
 		</view>
 		<view class="gototop {{scrolltop>200?'active':''}}" bindtap="goToTop"></view>
 	</scroll-view>
-  <view class="btn-submit">
-		<button class="btn-block btn-orange" bindtap="onAddRecord">新增待办事项</button>
-	</view>
+
 </view>
 

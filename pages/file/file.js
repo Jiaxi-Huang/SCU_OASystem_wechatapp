@@ -18,31 +18,7 @@ Page({
     page: 0,  //分页
     file_list:[],
     flitered_list:[],
-    
-    treeData: [
-      {
-        name: "根文件夹1",
-        id: 1,
-        children: [
-          {
-            name: "子文件夹1",
-            id: 2,
-            children: [
-              {
-                name: "孙文件夹1",
-                id: 3,
-                children: []
-              }
-            ]
-          },
-          {
-            name: "子文件夹2",
-            id: 4,
-            children: []
-          }
-        ]
-      }
-    ]
+  
   },
   onLoad: function () { //加载数据渲染页面
     // this.fetchServiceData();
@@ -217,10 +193,50 @@ Page({
     // console.log("执行到handleGetTodoResult了");
     let that = this;
     // 使用 setData 更新 todo_list 并确保图片路径正确
+    res.data.data.pop();
+    res.data.data.pop();
+    res.data.data.pop();
+    console.log(res.data.data);
     that.setData({
+      
       file_list: res.data.data.map(item => {
-          // item.url = item.todo_fin === "已完成" ? "/images/radiofill.png" : "/images/radio.png";
-          return item;
+
+        if(item.size >= 1024 * 1024 * 1024){
+          item.size = Math.round(item.size / (1024 * 1024 * 1024) * 10) / 10 + "GB"
+        }else if(item.size >= 1024 * 1024){
+          item.size = Math.round(item.size / (1024 * 1024) * 10) / 10 + "MB"
+        }else if(item.size >= 1024){
+          item.size = Math.round(item.size / 1024  * 10) / 10 + "KB"
+        }else{
+          item.size = item.size + "字节"
+        }
+
+        if(item.ext === "jpg"||item.ext === "png"){
+          item.imageUrl = item.url
+        }
+        else if(item.ext === "docx"||item.ext === "doc"){
+          item.imageUrl = "/images/doc.jpg"
+        }
+        else if(item.ext === "pptx"){
+          item.imageUrl = "/images/pptx.jpg"
+        }
+        else if(item.ext === "pdf"){
+          item.imageUrl = "/images/pdf.jpg"
+        }
+        else if(item.ext === "xls"||item.ext === "xlsx"){
+          item.imageUrl = "/images/excel.jpg"
+        }
+        else if(item.ext === "txt"){
+          item.imageUrl = "/images/txt.jpg"
+        }
+        else if(item.ext === "rar"||item.ext === "zip"||item.ext === "7z"){
+          item.imageUrl = "/images/rar.jpg"
+        }
+        else{
+          item.imageUrl = "/images/unknown.jpg"
+        }
+        
+        return item;
       }),
     }, () => {
       that.setData({
@@ -228,34 +244,40 @@ Page({
       })
     });
   },
+  
   onModifyRecord:function (e)  { //e is "event"
     var record = JSON.stringify(e.target.dataset.record);
     wx.navigateTo({
-      url: 'todo_modify?record=' + record,
+      url: 'file_modify?record=' + record,
     });
   },
   onInfo:function (e)  { //e is "event"
     var record = JSON.stringify(e.target.dataset.record);
     wx.navigateTo({
-      url: 'todo_info?record=' + record,
+      url: 'file_info?record=' + record,
     });
   },
   goBackUpdateInfo:function ()  { //e is "event"
     this.getTodoRecord();
   },
+
   onDeleteRecord:function (e) {
-    var todo_id = e.target.dataset.todo_id;
+    var id = e.target.dataset.id;
     wx.showModal({
       cancelColor: "cancelColor",
       title: '提示',
-      content: '确认要删除ID '+ todo_id + '的记录吗',
+      content: '确认要删除ID '+ id + '的记录吗',
       complete: (res) => {
         if (res.confirm) {
           let that = this;
           wx.request({
-          url: 'http://localhost:8080/api/todolist/deleteTodo',
+          url: 'http://localhost:8080/api/file/delFile',
             method: 'POST',
-            data:{"todo_id":todo_id},
+            data:{
+              acsTkn: wx.getStorageSync('accessToken'),
+              beforeDirId:0,
+              ids:[id]       
+            },
             success:function(res) {
               that.getTodoRecord();
             },

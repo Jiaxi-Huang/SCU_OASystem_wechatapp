@@ -1,0 +1,60 @@
+<view class="container container-gray">
+	<view class="group">
+		<view class="group-header">文件详情</view>
+		<view class="group-body">
+			<view class="input-list">
+				<view class="input-item">
+          <text class="input-item-label">文件名</text>
+          <view class="input-item-content">
+            <text>{{record.fileName}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">文件格式</text>
+          <view class="input-item-content">
+            <text>{{record.ext}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">文件大小</text>
+          <view class="input-item-content">
+            <text>{{record.size}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">文件备注</text>
+          <view class="input-item-content">
+            <text>{{record.remark}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">文件url</text>
+          <view class="input-item-content">
+            <text>{{record.url}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">创建时间</text>
+          <view class="input-item-content">
+            <text>{{record.createTime}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">修改时间</text>
+          <view class="input-item-content">
+            <text>{{record.updateTime}}</text>
+          </view>
+        </view>
+        <view class="input-item">
+            <text class="input-item-label">修改人ID</text>
+            <view class="input-item-content">
+            <text>{{record.userId}}</text>
+          </view>
+        </view>
+			</view>
+		</view>
+	</view>
+	<view class="btn-submit">
+		<button class="btn-block btn-orange" bindtap="applySubmit">返回</button>
+	</view>
+</view>

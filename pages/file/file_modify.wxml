@@ -1,0 +1,24 @@
+<view class="container container-gray">
+	<view class="group">
+		<view class="group-header">文件名称及备注修改</view>
+		<view class="group-body">
+			<view class="input-list">
+				<view class="input-item">
+          <text class="input-item-label">文件名</text>
+          <view class="input-item-content">
+            <input type="text" value="{{record.fileName}}" bindinput="inputChange" data-field="fileName"></input>
+          </view>
+        </view>
+        <view class="input-item">
+          <text class="input-item-label">备注内容</text>
+          <view class="input-item-content">
+            <textarea type="text" auto-height="{{true}}" value="{{record.remark}}" bindinput="inputChange" data-field="remark"></textarea>
+          </view>
+        </view>
+			</view>
+		</view>
+	</view>
+	<view class="btn-submit">
+		<button class="btn-block btn-orange" bindtap="applySubmit">提交</button>
+	</view>
+</view>
