@@ -8,9 +8,8 @@
 		</view>
 		<button class="search-extra-btn" bindtap='refresh'>刷新</button>
 	</view>
-
   <view class="btn-submit">
-		<button class="btn-block btn-orange" bindtap="onAddRecord">上传文件</button>
+		<button class="btn-block btn-orange" bindtap="chooseUpload">上传文件</button>
 	</view>
 	<scroll-view class="container-body" scroll-y="true" scroll-top="{{scrolltop}}" bindscroll="scrollHandle" lower-threshold="50" bindscrolltolower="scrollLoading" >
 		<view class="service-list">

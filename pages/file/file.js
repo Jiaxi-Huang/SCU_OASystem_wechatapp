@@ -18,6 +18,7 @@ Page({
     page: 0,  //分页
     file_list:[],
     flitered_list:[],
+    uploadimgs: []
   
   },
   onLoad: function () { //加载数据渲染页面
@@ -305,6 +306,56 @@ Page({
       }
     })
   },
+
+  chooseUpload:function() {
+    var that = this
+    wx.chooseMessageFile({
+      count: 10,
+      type: 'file',
+      extension: ['.xlsx', '.xls', '.XLSX', '.XLS', 'xlsx', 'xls', 'XLSX', 'XLS'],
+      success(res) {
+        const tempFilePaths = res.tempFiles
+        for (var i in tempFilePaths) {
+          wx.uploadFile({
+            url: 'http://localhost:8080/api/file/upload', //上传的服务器地址
+            filePath: tempFilePaths[i].path,
+            name: 'file',
+            formData: {
+              'fileName':tempFilePaths[i].name,
+              'folder_id':0,
+              'accessToken': wx.getStorageSync('accessToken'),
+                   },
+            success: function (resp) {
+              console.log(resp)
+              var data = JSON.parse(resp.data)
+              console.log(data)
+              if (data.code == 200) {
+                wx.showToast({
+                  title: '上传成功',
+                  icon: 'none',
+                  duration: 1300
+                })
+              } else {
+                wx.showToast({
+                  title: data.message,
+                  icon: 'none',
+                  duration: 2000
+                })
+              }
+              that.getTodoRecord();
+            },
+            fail: function (err) {
+              console.log(err)
+            }
+          })
+        }
+      }
+    })
+  },
+
+
+
+
   onAddRecord:function () {
     wx.navigateTo({
       url: 'todo_add',
