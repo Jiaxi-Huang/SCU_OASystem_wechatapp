@@ -1,10 +1,11 @@
 Page({
   data: {
+    
     showsearch:false,   //显示搜索按钮
     searchtext:'',  //搜索文字
     filterdata:{},  //筛选条件数据
-    showfilter:false, //是否显示下拉筛选
-    showfilterindex:null, //显示哪个筛选类目
+    showfilter:true, //是否显示下拉筛选
+    showfilterindex:0, //显示哪个筛选类目
     sortindex:0,  //一级分类索引
     sortid:null,  //一级分类id
     subsortindex:0, //二级分类索引
@@ -18,7 +19,8 @@ Page({
     page: 0,  //分页
     file_list:[],
     flitered_list:[],
-    uploadimgs: []
+    uploadimgs: [],
+    userDepartment:''
   
   },
   onLoad: function () { //加载数据渲染页面
@@ -37,11 +39,14 @@ Page({
       filterdata:{
         "sort": [
           {"id": 0,
-          "title": "已完成",
+          "title": "个人文件夹",
           } ,
           {"id": 1,
-          "title": "未完成",
-          } ,
+          "title": "部门文件夹",
+          },
+          {"id": 2,
+          "title": "公司文件夹",
+          }
       ],
       }
     })
@@ -84,20 +89,35 @@ Page({
         showfilterindex:i,
       })
     }
-    // console.log(d.showfilterindex);
+     console.log(d.showfilterindex);
   },
   setSortIndex:function(e){
     const dataset = e.currentTarget.dataset;
+    console.log(dataset)
     this.setData({
       showfilter: 0,
     })
-    const key = dataset.sortid? '未完成':'已完成';
-    console.log(key);
+    let that=this
+    let department="";
+    let is_shared;
+    if(dataset.sortid === 0){
+      department=null;
+      is_shared=0;
+    }
+    if(dataset.sortid === 1){
+      department=that.data.userDepartment;
+      is_shared=0;
+    }
+    if(dataset.sortid === 2){
+      department=null;
+      is_shared=1;
+    }
+
     let temp_list = [];
     let _this = this;
     _this.data.file_list.forEach(record => {
-      if (record.remark === key) {
-        console.log(record.todo_title + "ok");
+      if (record.department === department && record.isShared === is_shared) {
+        console.log(record.id + "ok");
         temp_list.push(record);
       }
     });
@@ -194,7 +214,10 @@ Page({
     // console.log("执行到handleGetTodoResult了");
     let that = this;
     // 使用 setData 更新 todo_list 并确保图片路径正确
-    res.data.data.pop();
+    this.setData({
+      userDepartment:res.data.data.pop()
+    })
+    console.log(that.data.userDepartment)
     res.data.data.pop();
     res.data.data.pop();
     console.log(res.data.data);
