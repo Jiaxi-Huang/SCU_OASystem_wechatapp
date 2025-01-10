@@ -54,8 +54,8 @@
     "pages/map/map_location",
     "pages/map/map_menu",
     "pages/map/map_monitor",
-    "pages/map/map_test"
-
+    "pages/map/map_test",
+    "pages/file/_sub-tree"
   ],
   "window": {
     "backgroundTextStyle": "dark",
