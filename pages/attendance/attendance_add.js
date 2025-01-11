@@ -1,63 +1,97 @@
 Page({
     data: {
-      attendanceDate: '', // 日期
-      checkInTime: '', // 上班时间
-      checkOutTime: '', // 下班时间
-      status: '正常', // 状态
-      statusOptions: ['正常', '迟到', '早退', '缺勤'], // 状态选项
+      form: {
+        userName: '', // 员工名
+        attendanceDate: '', // 考勤日期
+        checkIn: '', // 上班打卡时间
+        checkOut: '', // 下班打卡时间
+        inLocation: '', // 上班打卡位置
+        outLocation: '', // 下班打卡位置
+      },
+      locations: [ // 打卡位置选项
+        { value: '1', label: '内网ip' },
+        { value: '2', label: '成都' },
+        { value: '3', label: '上海' },
+        { value: '4', label: '北京' },
+      ],
+      rules: { // 表单验证规则
+        userName: [{ required: true, message: '请输入员工名' }],
+        attendanceDate: [{ required: true, message: '请选择考勤日期' }],
+        checkIn: [{ required: true, message: '请输入上班打卡时间' }],
+        checkOut: [{ required: true, message: '请输入下班打卡时间' }],
+      },
     },
   
-    // 监听日期选择
+    // 监听员工名输入
+    onUserNameInput(e) {
+      this.setData({
+        'form.userName': e.detail.value,
+      });
+    },
+  
+    // 监听考勤日期选择
     onDateChange(e) {
       this.setData({
-        attendanceDate: e.detail.value,
+        'form.attendanceDate': e.detail.value,
       });
     },
   
-    // 监听上班时间选择
+    // 监听上班打卡时间选择
     onCheckInTimeChange(e) {
       this.setData({
-        checkInTime: e.detail.value,
+        'form.checkIn': e.detail.value,
       });
     },
   
-    // 监听下班时间选择
+    // 监听下班打卡时间选择
     onCheckOutTimeChange(e) {
       this.setData({
-        checkOutTime: e.detail.value,
+        'form.checkOut': e.detail.value,
       });
     },
   
-    // 监听状态选择
-    onStatusChange(e) {
+    // 监听上班打卡位置选择
+    onInLocationChange(e) {
+      const index = e.detail.value; // 获取选中的索引
+      const selectedLocation = this.data.locations[index].label; // 获取对应的 label
       this.setData({
-        status: this.data.statusOptions[e.detail.value],
+        'form.inLocation': selectedLocation, // 保存 label
+      });
+    },
+  
+    // 监听下班打卡位置选择
+    onOutLocationChange(e) {
+      const index = e.detail.value; // 获取选中的索引
+      const selectedLocation = this.data.locations[index].label; // 获取对应的 label
+      this.setData({
+        'form.outLocation': selectedLocation, // 保存 label
       });
     },
   
     // 提交表单
     onSubmit() {
-      const { attendanceDate, checkInTime, checkOutTime, status } = this.data;
+      const { form, rules } = this.data;
   
       // 表单验证
-      if (!attendanceDate || !checkInTime || !checkOutTime || !status) {
-        wx.showToast({
-          title: '请填写完整信息',
-          icon: 'none',
-        });
-        return;
+      for (const key in rules) {
+        if (rules[key][0].required && !form[key]) {
+          wx.showToast({
+            title: rules[key][0].message,
+            icon: 'none',
+          });
+          return;
+        }
       }
   
       // 构造请求参数
       const requestData = {
-        attendanceDate,
-        checkInTime,
-        checkOutTime,
-        status,
+        userName: form.userName,
+        attendanceDate: form.attendanceDate,
+        checkIn: form.checkIn,
+        checkOut: form.checkOut,
+        inLocation: form.inLocation,
+        outLocation: form.outLocation,
       };
-  
-      // 获取 accessToken
-      const accessToken = wx.getStorageSync('accessToken');
   
       // 提交数据到后端
       wx.request({
@@ -65,7 +99,6 @@ Page({
         method: 'POST',
         header: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`, // 如果需要 token
         },
         data: requestData,
         success: (res) => {
