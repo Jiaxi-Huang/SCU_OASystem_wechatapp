@@ -1,0 +1,36 @@
+<view class="container">
+  <!-- 日期选择 -->
+  <view class="form-item">
+    <text>日期</text>
+    <picker mode="date" value="{{attendanceDate}}" bindchange="onDateChange">
+      <view class="picker">{{attendanceDate || '请选择日期'}}</view>
+    </picker>
+  </view>
+
+  <!-- 上班时间选择 -->
+  <view class="form-item">
+    <text>上班时间</text>
+    <picker mode="time" value="{{checkInTime}}" bindchange="onCheckInTimeChange">
+      <view class="picker">{{checkInTime || '请选择上班时间'}}</view>
+    </picker>
+  </view>
+
+  <!-- 下班时间选择 -->
+  <view class="form-item">
+    <text>下班时间</text>
+    <picker mode="time" value="{{checkOutTime}}" bindchange="onCheckOutTimeChange">
+      <view class="picker">{{checkOutTime || '请选择下班时间'}}</view>
+    </picker>
+  </view>
+
+  <!-- 状态选择 -->
+  <view class="form-item">
+    <text>状态</text>
+    <picker mode="selector" range="{{statusOptions}}" value="{{statusIndex}}" bindchange="onStatusChange">
+      <view class="picker">{{status}}</view>
+    </picker>
+  </view>
+
+  <!-- 提交按钮 -->
+  <button bindtap="onSubmit" class="submit-button">提交</button>
+</view>

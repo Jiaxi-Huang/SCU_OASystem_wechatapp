@@ -32,6 +32,10 @@
     "pages/question/question",
     "pages/property/property",
     "pages/apply/apply",
+    "pages/attendance/attendance",
+    "pages/attendance/attendance_add",
+    "pages/attendance/attendance_info",
+    "pages/attendance/attendance_modify",
     "pages/weather/weather",
     "pages/activity/activity",
     "pages/activitydetail/activitydetail",
@@ -55,6 +59,7 @@
     "pages/map/map_menu",
     "pages/map/map_monitor",
     "pages/map/map_test"
+
   ],
   "window": {
     "backgroundTextStyle": "dark",

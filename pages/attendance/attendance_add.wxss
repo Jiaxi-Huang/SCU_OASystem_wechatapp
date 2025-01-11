@@ -1,0 +1,36 @@
+/* 页面容器 */
+.container {
+    padding: 20px;
+    background-color: #f8f8f8;
+  }
+  
+  /* 表单项 */
+  .form-item {
+    margin-bottom: 20px;
+  }
+  
+  .form-item text {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  /* 选择器样式 */
+  .picker {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #555;
+  }
+  
+  /* 提交按钮 */
+  .submit-button {
+    width: 100%;
+    margin-top: 20px;
+    background-color: #07c160;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+  }

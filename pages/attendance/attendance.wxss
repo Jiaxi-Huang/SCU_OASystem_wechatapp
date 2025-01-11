@@ -1,1 +1,64 @@
-/* pages/attendance/attendance.wxss */
+/* 页面容器 */
+.container {
+    padding: 20px;
+    background-color: #f8f8f8;
+  }
+  
+  /* 新增记录按钮 */
+  .add-button {
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: #07c160;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+  
+  /* 考勤记录列表 */
+  .records {
+    margin-top: 20px;
+  }
+  
+  /* 每条考勤记录 */
+  .record-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  /* 记录信息 */
+  .record-info {
+    flex: 1;
+  }
+  
+  .record-info text {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* 记录操作按钮 */
+  .record-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .modify-button {
+    background-color: #007bff;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 5px;
+  }
+  
+  .delete-button {
+    background-color: #dc3545;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 5px;
+  }

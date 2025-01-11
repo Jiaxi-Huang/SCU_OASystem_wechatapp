@@ -1,2 +1,20 @@
-<!--pages/attendance/attendance.wxml-->
-<text>pages/attendance/attendance.wxml</text>
+<view class="container">
+  <!-- 新增记录按钮 -->
+  <button bindtap="onAddRecord" class="add-button">新增考勤记录</button>
+
+  <!-- 考勤记录列表 -->
+  <view class="records">
+    <view wx:for="{{attendanceRecords}}" wx:key="id" class="record-item">
+      <view class="record-info">
+        <text>日期: {{item.attendanceDate}}</text>
+        <text>上班时间: {{item.checkIn || '未打卡'}}</text>
+        <text>下班时间: {{item.checkOut || '未打卡'}}</text>
+        <text>状态: {{item.status}}</text>
+      </view>
+      <view class="record-actions">
+        <button bindtap="onModifyRecord" data-record="{{item}}" class="modify-button">修改</button>
+        <button bindtap="onDeleteRecord" data-record="{{item}}" class="delete-button">删除</button>
+      </view>
+    </view>
+  </view>
+</view>

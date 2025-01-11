@@ -123,15 +123,16 @@ Page({
           'url':'leave'
         },
         {
+            'icon':'./../../images/icon_05.png',
+            'text':'考勤',
+            'url':'attendance'
+        },
+        {
           'icon':'./../../images/icon_32.png',
           'text':'文件',
           'url':'file'
         },
-        {
-            'icon':'./../../images/icon_32.png',
-            'text':'考勤',
-            'url':'attendance'
-        },
+
       ],
       imgUrls: [
         '../../images/working.gif'
