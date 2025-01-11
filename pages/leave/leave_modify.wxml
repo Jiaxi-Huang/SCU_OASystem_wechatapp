@@ -1,19 +1,13 @@
-<!--pages/leave/leave_modify.wxml-->
+<!-- pages/leave/leave_modify.wxml -->
 <view class="container container-gray">
   <view class="group">
     <view class="group-header">请假申请修改</view>
     <view class="group-body">
       <view class="input-list">
         <view class="input-item">
-          <text class="input-item-label">请假编号</text>
-          <view class="input-item-content">
-            <input type="text" value="{{record.leave_id}}" disabled></input>
-          </view>
-        </view>
-        <view class="input-item">
           <text class="input-item-label">请假原因</text>
           <view class="input-item-content">
-            <input type="text" value="{{record.leave_reason}}" bindinput="inputChange" data-field="leave_reason"></input>
+            <input type="text" value="{{record.reason}}" bindinput="inputChange" data-field="reason"></input>
           </view>
         </view>
         <view class="input-item">
@@ -43,14 +37,6 @@
             </picker>
             <picker mode="time" bindchange="endTimeChange">
               <view class="picker">{{endTime}}</view>
-            </picker>
-          </view>
-        </view>
-        <view class="input-item">
-          <text class="input-item-label">状态</text>
-          <view class="input-item-content">
-            <picker mode="selector" range="{{statusOptions}}" bindchange="statusChange">
-              <view class="picker">{{statusOptions[statusIndex]}}</view>
             </picker>
           </view>
         </view>
