@@ -1,12 +1,28 @@
 Page({
     data: {
-      attendanceRecords: [], // 考勤记录
+      attendanceRecords: [], // 所有考勤记录
+      filteredRecords: [], // 过滤后的考勤记录
+      selectedDate: '', // 选择的日期
     },
   
     onLoad() {
-      const accessToken = wx.getStorageSync('accessToken');
-      console.log('AccessToken:', accessToken); // 打印 accessToken
+      // 初始化日期为今天
+      const today = new Date().toISOString().split('T')[0];
+      this.setData({
+        selectedDate: today,
+      });
+      // 加载考勤记录
       this.fetchAttendanceRecords();
+    },
+  
+    // 监听日期选择
+    onDateChange(e) {
+      const selectedDate = e.detail.value;
+      this.setData({
+        selectedDate: selectedDate,
+      });
+      // 过滤考勤记录
+      this.filterRecordsByDate(selectedDate);
     },
   
     // 获取考勤记录
@@ -20,12 +36,14 @@ Page({
           'Content-Type': 'application/json', // 设置请求头
         },
         success: function (res) {
-          console.log('Response:', res.data); // 打印后端返回的数据
+          console.log('后端返回:', res.data); // 打印后端返回的数据
           if (res.statusCode === 200 && res.data && res.data.status === 0) {
             const records = res.data.data || []; // 确保 records 是数组
             that.setData({
               attendanceRecords: records,
             });
+            // 初始化时过滤今天的记录
+            that.filterRecordsByDate(that.data.selectedDate);
           } else {
             wx.showToast({
               title: '获取考勤记录失败',
@@ -41,6 +59,40 @@ Page({
           });
         },
       });
+    },
+  
+    // 根据日期过滤考勤记录
+    filterRecordsByDate(date) {
+      const { attendanceRecords } = this.data;
+  
+      // 将选择的日期格式化为 YYYY-MM-DD
+      const formattedDate = this.formatDate(date);
+  
+      const filteredRecords = attendanceRecords.filter((record) => {
+        // 将记录日期格式化为 YYYY-MM-DD
+        const recordDate = this.formatDate(record.attendanceDate);
+        return recordDate === formattedDate;
+      });
+  
+      console.log('过滤后的记录:', filteredRecords); // 打印过滤后的记录
+      this.setData({
+        filteredRecords: filteredRecords,
+      });
+    },
+  
+    // 格式化日期为 YYYY-MM-DD
+    formatDate(date) {
+      if (!date) return '';
+  
+      // 如果日期是时间戳，先转换为日期对象
+      const dateObj = new Date(date);
+  
+      // 格式化为 YYYY-MM-DD
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObj.getDate()).padStart(2, '0');
+  
+      return `${year}-${month}-${day}`;
     },
   
     // 新增考勤记录
