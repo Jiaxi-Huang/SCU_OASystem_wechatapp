@@ -4,6 +4,20 @@
     background-color: #f8f8f8;
   }
   
+  /* 日期选择器 */
+  .date-picker {
+    margin-bottom: 20px;
+  }
+  
+  .date-picker .picker {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #555;
+    text-align: center;
+  }
+  
   /* 新增记录按钮 */
   .add-button {
     width: 100%;
