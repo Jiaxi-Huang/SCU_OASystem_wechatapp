@@ -1,0 +1,25 @@
+<view class="container">
+  <!-- 消息通知 -->
+  <view class="message-box">
+    <view class="message-item" bindtap="navigateToTodoList">
+      <text>您有</text>
+      <text class="message-count">{{ pendingTodos.length }}</text>
+      <text>个待办事项待处理</text>
+    </view>
+    <view class="message-item" bindtap="navigateToLeaveApproval">
+      <text>您有</text>
+      <text class="message-count">{{ pendingLeaveApprovals.length }}</text>
+      <text>条请假审批待处理</text>
+    </view>
+    <view class="message-item" bindtap="navigateToReimbursement">
+      <text>您有</text>
+      <text class="message-count">{{ pendingReimbursement.length }}</text>
+      <text>笔报销待处理</text>
+    </view>
+    <view class="message-item" bindtap="navigateToMeetings">
+      <text>您有</text>
+      <text class="message-count">{{ pendingMeetings.length }}</text>
+      <text>个会议待处理</text>
+    </view>
+  </view>
+</view>

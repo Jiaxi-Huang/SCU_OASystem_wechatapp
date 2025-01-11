@@ -1,0 +1,27 @@
+.container {
+    padding: 20px;
+  }
+  
+  .message-box {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .message-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+  }
+  
+  .message-item:last-child {
+    border-bottom: none;
+  }
+  
+  .message-count {
+    color: #ff4d4f;
+    font-weight: bold;
+    margin: 0 5px;
+  }
