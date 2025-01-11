@@ -1,1 +1,46 @@
 /* pages/leave/leave_modify.wxss */
+.container {
+  padding: 20rpx;
+}
+
+.group {
+  margin-bottom: 20rpx;
+}
+
+.group-header {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.input-list {
+  background-color: #fff;
+  padding: 20rpx;
+  border-radius: 10rpx;
+}
+
+.input-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.input-item-label {
+  width: 150rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.input-item-content {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.picker {
+  color: #333;
+}
+
+.btn-submit {
+  margin-top: 20rpx;
+}

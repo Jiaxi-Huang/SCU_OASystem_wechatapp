@@ -1,4 +1,4 @@
-// pages/leave/leave_list.js
+// pages/leave/leave.js
 Page({
   data: {
     showsearch: false,
@@ -45,6 +45,7 @@ Page({
             filtered_list: res.data.data,
           });
         }
+        console.log(that.data.leave_list)
       },
     });
   },
@@ -59,10 +60,28 @@ Page({
   submitSearch: function () {
     const key = this.data.searchtext;
     const temp_list = this.data.leave_list.filter((record) =>
-      record.leave_reason.includes(key)
+      record.reason.includes(key)
     );
+  
+    if (temp_list.length === 0) {
+      wx.showToast({
+        title: '未找到相关记录',
+        icon: 'none', 
+        duration: 2000, 
+      });
+    }
+  
     this.setData({
       filtered_list: temp_list,
+    });
+  },
+
+  refresh: function () {
+    this.getLeaveList();
+    wx.showToast({
+      title: '刷新成功',
+      icon: 'success',
+      duration: 1000,
     });
   },
 
@@ -90,7 +109,7 @@ Page({
     });
     const key = this.data.filterdata.status[dataset.statusindex].title;
     const temp_list = this.data.leave_list.filter(
-      (record) => record.leave_status === key
+      (record) => record.status === key
     );
     this.setData({
       filtered_list: temp_list,
@@ -138,6 +157,7 @@ Page({
 
   onDeleteRecord: function (e) {
     const leave_id = e.target.dataset.leave_id;
+    const that = this;
     wx.showModal({
       title: '提示',
       content: '确认要删除该请假记录吗？',

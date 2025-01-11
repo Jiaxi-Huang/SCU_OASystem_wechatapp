@@ -1,12 +1,12 @@
-<!--pages/leave/leave_list.wxml-->
+<!-- pages/leave/leave_list.wxml -->
 <view class="container">
   <view class="btn-submit">
     <button class="btn-block btn-orange" bindtap="onAddRecord">新增请假申请</button>
   </view>
-	
+  
   <view class="search-flex {{scrolltop>200?'tophide':''}}">
     <view class="search-bar">
-      <input type="text" maxlength="12" placeholder="请输入标题关键查询" bindinput="inputSearch"></input>
+      <input type="text" maxlength="12" placeholder="请输入请假原因查询" bindinput="inputSearch"></input>
       <button class="search-btn" bindtap="submitSearch" wx:if="{{showsearch}}">搜索</button>
     </view>
     <button class="search-extra-btn" bindtap='refresh'>刷新</button>
@@ -28,14 +28,14 @@
 
   <scroll-view class="container-body" scroll-y="true" scroll-top="{{scrolltop}}" bindscroll="scrollHandle" lower-threshold="50" bindscrolltolower="scrollLoading">
     <view class="leave-list">
-      <view class="leave-item" wx:for="{{filtered_list}}" wx:key="{{item.leave_id}}">
+      <view class="leave-item" wx:for="{{filtered_list}}" wx:key="{{item.id}}">
         <view class="leave-text">
-          <view class="leave-title">{{item.leave_reason}}</view>
+          <view class="leave-title">{{item.reason}}</view>
           <view class="leave-tags">
             <text>请假编号：{{item.leave_id}}</text>
-            <text>类型：{{item.leave_type}}</text>
+            <text>类型：{{item.type}}</text>
           </view>
-          <text class="leave-status">状态：{{item.leave_status}}</text>
+          <text class="leave-status">状态：{{item.status}}</text>
           <view class="leave-tags">
             <text bindtap="onDeleteRecord" data-leave_id="{{item.leave_id}}">删除</text>
             <text bindtap="onModifyRecord" data-record="{{item}}">修改</text>
@@ -46,5 +46,4 @@
     </view>
     <view class="gototop {{scrolltop>200?'active':''}}" bindtap="goToTop"></view>
   </scroll-view>
-
 </view>

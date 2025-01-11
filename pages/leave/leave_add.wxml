@@ -1,4 +1,4 @@
-<!--pages/leave/leave_add.wxml-->
+<!-- pages/leave/leave_add.wxml -->
 <view class="container container-gray">
   <view class="group">
     <view class="group-header">请假申请添加</view>

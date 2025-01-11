@@ -1,4 +1,4 @@
-<!--pages/leave/leave_info.wxml-->
+<!-- pages/leave/leave_info.wxml -->
 <view class="container container-gray">
   <view class="group">
     <view class="group-header">请假申请详情</view>
@@ -13,31 +13,31 @@
         <view class="input-item">
           <text class="input-item-label">请假原因</text>
           <view class="input-item-content">
-            <text>{{record.leave_reason}}</text>
+            <text>{{record.reason}}</text>
           </view>
         </view>
         <view class="input-item">
           <text class="input-item-label">请假类型</text>
           <view class="input-item-content">
-            <text>{{record.leave_type}}</text>
+            <text>{{record.type}}</text>
           </view>
         </view>
         <view class="input-item">
           <text class="input-item-label">开始时间</text>
           <view class="input-item-content">
-            <text>{{record.leave_start_time}}</text>
+            <text>{{record.start_date}}</text>
           </view>
         </view>
         <view class="input-item">
           <text class="input-item-label">结束时间</text>
           <view class="input-item-content">
-            <text>{{record.leave_end_time}}</text>
+            <text>{{record.end_date}}</text>
           </view>
         </view>
         <view class="input-item">
           <text class="input-item-label">状态</text>
           <view class="input-item-content">
-            <text>{{record.leave_status}}</text>
+            <text>{{record.status}}</text>
           </view>
         </view>
       </view>
