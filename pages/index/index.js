@@ -128,7 +128,7 @@ Page({
             'url':'attendance'
         },
         {
-          'icon':'./../../images/icon_32.png',
+          'icon':'./../../images/file2.png',
           'text':'文件',
           'url':'file'
         },

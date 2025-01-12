@@ -55,24 +55,3 @@
 
 
 
-
-
-
-
-.tree-container {
-  padding: 10px;
-}
-
-.folder-item {
-  margin-bottom: 5px;
-  padding-left: 20px;
-  border-left: 1px solid #ccc;
-}
-
-.sub-folder {
-  padding-left: 20px;
-}
-
-.sub-tree {
-  margin-left: 10px;
-}
