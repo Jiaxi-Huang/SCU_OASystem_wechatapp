@@ -4,6 +4,7 @@ Page({
       pendingLeaveApprovals: [], // 请假审批
       pendingReimbursement: [], // 报销
       pendingMeetings: [], // 会议
+      timer: null, // 定时器
     },
   
     onLoad() {
@@ -11,6 +12,57 @@ Page({
       this.getLeaveApprovals();
       this.getReimbursements();
       this.getMeetings();
+  
+      // 启动定时器，每隔10分钟检查一次
+      this.setData({
+        timer: setInterval(() => {
+          this.checkDeadlines();
+        }, 10 * 60 * 1000) // 10分钟
+      });
+    },
+  
+    onUnload() {
+      // 页面卸载时清除定时器
+      if (this.data.timer) {
+        clearInterval(this.data.timer);
+      }
+    },
+  
+    // 检查即将截止的事项
+    checkDeadlines() {
+      const now = new Date().getTime();
+      const oneHourLater = now + 60 * 60 * 1000; // 1小时后
+  
+      // 检查待办事项
+      this.data.pendingTodos.forEach(todo => {
+        const todoDeadline = new Date(todo.todo_ddl).getTime(); // 使用 todo_ddl 作为截止日期
+        if (todoDeadline <= oneHourLater && todoDeadline > now) {
+          this.showReminder(`待办事项 "${todo.todo_title}" 即将截止`); // 使用 todo_title 作为事项名称
+        }
+      });
+  
+      // 检查请假审批
+      this.data.pendingLeaveApprovals.forEach(leave => {
+        const leaveDeadline = new Date(leave.end_date).getTime(); // 使用 end_date 作为截止日期
+        if (leaveDeadline <= oneHourLater && leaveDeadline > now) {
+          this.showReminder(`请假审批 "${leave.title}" 即将截止`);
+        }
+      });
+    },
+  
+    // 显示提醒弹窗
+    showReminder(message) {
+      wx.showModal({
+        title: '即将截止提醒',
+        content: message,
+        showCancel: false,
+        confirmText: '知道了',
+        success(res) {
+          if (res.confirm) {
+            console.log('用户点击了知道了');
+          }
+        },
+      });
     },
   
     // 获取待办事项
