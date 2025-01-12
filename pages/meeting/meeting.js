@@ -180,9 +180,9 @@ Page({
       }
     }
     wx.request({
-      url: 'http://localhost:8080/api/meetings/search_by_mtin_id', // 替换为你的API地址
+      url: 'http://localhost:8080/api/meetings/search_by_mtin_id', 
       method: 'POST',
-      data: { data: [mtin_id] },
+      data: { data: [mtin_id_number] },
       success: (res) => {
         let data = res.data;
         if (data.status === 0) {
