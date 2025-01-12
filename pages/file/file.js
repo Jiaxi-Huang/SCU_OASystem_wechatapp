@@ -4,8 +4,8 @@ Page({
     showsearch:false,   //显示搜索按钮
     searchtext:'',  //搜索文字
     filterdata:{},  //筛选条件数据
-    showfilter:true, //是否显示下拉筛选
-    showfilterindex:1, //显示哪个筛选类目
+    showfilter:false, //是否显示下拉筛选
+    showfilterindex:0, //显示哪个筛选类目
     sortindex:0,  //一级分类索引
     sortid:null,  //一级分类id
     subsortindex:0, //二级分类索引
@@ -106,7 +106,8 @@ Page({
     if(d.showfilterindex == i){
       this.setData({
         showfilter: false,
-        showfilterindex: null
+        showfilterindex: null,
+        flitered_list: this.data.personal_list
       })
     }else{    
       this.setData({
@@ -298,13 +299,16 @@ Page({
       userDepartment:res.data.data.pop(),
       userId:res.data.data.pop()
     })
+    console.log(i)
+    i = parseInt(i);
+    console.log(i); 
     console.log(that.data.userDepartment)
     res.data.data.pop();
     console.log(res.data.data);
     const personnalFile = res.data.data.filter(item => item.department === null && item.isShared   === 0 && item.userId === that.data.userId);
     const departmentFile = res.data.data.filter(item => item.department === that.data.userDepartment && item.isShared   === 0 );
     const companyFile = res.data.data.filter(item => item.department === null && item.isShared   === 1 );
-    that.setData({
+    this.setData({
       personal_list: personnalFile,
       department_list:departmentFile,
       company_list:companyFile,
@@ -385,32 +389,23 @@ item.updateTime=formattedDate;
           else{
             item.imageUrl = "/images/unknown.jpg"
           }
-          
           return item;
       }),
     }, () => {
-      if(that.data.count===0){
-        that.setData({
-          flitered_list: that.data.personal_list,
-          count:1
-        })
-      }else{
-        that.setData({
-          flitered_list: that.data.file_list
-        })
-      }
+      console.log(that.data.personal_list)
       if(i===0){
-        that.setData({
+        console.log(that.data.personal_list)
+        this.setData({
           flitered_list: that.data.personal_list,
         })
       }
       if(i===1){
-        that.setData({
+        this.setData({
           flitered_list: that.data.department_list,
         })
       }
       if(i===2){
-        that.setData({
+        this.setData({
           flitered_list: that.data.company_list,
         })
       }
@@ -420,8 +415,9 @@ item.updateTime=formattedDate;
   
   onModifyRecord:function (e)  { //e is "event"
     var record = JSON.stringify(e.target.dataset.record);
+    let that=this
     wx.navigateTo({
-      url: 'file_modify?record=' + record,
+      url: 'file_modify?record=' + record + '&folderId=' + that.data.folderId,
     });
   },
   onInfo:function (e)  { //e is "event"
@@ -430,8 +426,8 @@ item.updateTime=formattedDate;
       url: 'file_info?record=' + record,
     });
   },
-  goBackUpdateInfo:function ()  { //e is "event"
-    this.getTodoRecord();
+  goBackUpdateInfo:function (folderId)  { //e is "event"
+    this.getTodoRecord(folderId);
   },
 
   onDeleteRecord:function (e) {
