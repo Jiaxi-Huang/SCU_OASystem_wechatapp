@@ -63,32 +63,57 @@ Page({
       const that = this;
       const accessToken = wx.getStorageSync('accessToken');
   
-      // 调用上班打卡接口
-      wx.request({
-        url: `http://localhost:8080/api/attendance/checkInAttendance?accessToken=${accessToken}`,
-        method: 'POST',
-        header: {
-          'Content-Type': 'application/json',
-        },
-        success: function (res) {
-          console.log('上班打卡接口返回:', res.data);
-          if (res.statusCode === 200 && res.data && (res.data.status === 0 || res.data.status === -1)) {
-            wx.showToast({
-              title: res.data.status === 0 ? '上班打卡成功' : '上班打卡失败',
-              icon: res.data.status === 0 ? 'success' : 'none',
+      // 获取用户当前位置
+      wx.getLocation({
+        type: 'gcj02', // 返回国测局坐标
+        success: (res) => {
+          const latitude = res.latitude; // 纬度
+          const longitude = res.longitude; // 经度
+  
+          // 调用逆地理编码接口，获取城市信息
+          that.reverseGeocode(latitude, longitude, (city) => {
+            // 去掉“市”字
+            const formattedCity = city.replace('市', '');
+  
+            // 调用上班打卡接口
+            wx.request({
+              url: `http://localhost:8080/api/attendance/checkInAttendance?accessToken=${accessToken}`,
+              method: 'POST',
+              header: {
+                'Content-Type': 'application/json',
+              },
+              data: {
+                location: formattedCity, // 将处理后的城市信息存入数据库
+              },
+              success: function (res) {
+                console.log('上班打卡接口返回:', res.data);
+                if (res.statusCode === 200 && res.data && (res.data.status === 0 || res.data.status === -1)) {
+                  wx.showToast({
+                    title: res.data.status === 0 ? '上班打卡成功' : '上班打卡失败',
+                    icon: res.data.status === 0 ? 'success' : 'none',
+                  });
+                  that.fetchAttendanceRecords(); // 刷新考勤记录
+                } else {
+                  wx.showToast({
+                    title: '上班打卡失败',
+                    icon: 'none',
+                  });
+                }
+              },
+              fail: function (err) {
+                console.error('上班打卡失败:', err);
+                wx.showToast({
+                  title: '网络错误，请重试',
+                  icon: 'none',
+                });
+              },
             });
-            that.fetchAttendanceRecords(); // 刷新考勤记录
-          } else {
-            wx.showToast({
-              title: '上班打卡失败',
-              icon: 'none',
-            });
-          }
+          });
         },
-        fail: function (err) {
-          console.error('上班打卡失败:', err);
+        fail: (err) => {
+          console.error('获取位置失败：', err);
           wx.showToast({
-            title: '网络错误，请重试',
+            title: '获取位置失败，请检查权限',
             icon: 'none',
           });
         },
@@ -100,34 +125,85 @@ Page({
       const that = this;
       const accessToken = wx.getStorageSync('accessToken');
   
-      // 调用下班打卡接口
-      wx.request({
-        url: `http://localhost:8080/api/attendance/checkOutAttendance?accessToken=${accessToken}`,
-        method: 'POST',
-        header: {
-          'Content-Type': 'application/json',
-        },
-        success: function (res) {
-          console.log('下班打卡接口返回:', res.data);
-          if (res.statusCode === 200 && res.data && (res.data.status === 0 || res.data.status === -1 || res.data.status === -2)) {
-            wx.showToast({
-              title: res.data.status === 0 ? '下班打卡成功' : '下班打卡失败',
-              icon: res.data.status === 0 ? 'success' : 'none',
+      // 获取用户当前位置
+      wx.getLocation({
+        type: 'gcj02', // 返回国测局坐标
+        success: (res) => {
+          const latitude = res.latitude; // 纬度
+          const longitude = res.longitude; // 经度
+  
+          // 调用逆地理编码接口，获取城市信息
+          that.reverseGeocode(latitude, longitude, (city) => {
+            // 去掉“市”字
+            const formattedCity = city.replace('市', '');
+  
+            // 调用下班打卡接口
+            wx.request({
+              url: `http://localhost:8080/api/attendance/checkOutAttendance?accessToken=${accessToken}`,
+              method: 'POST',
+              header: {
+                'Content-Type': 'application/json',
+              },
+              data: {
+                location: formattedCity, // 将处理后的城市信息存入数据库
+              },
+              success: function (res) {
+                console.log('下班打卡接口返回:', res.data);
+                if (res.statusCode === 200 && res.data && (res.data.status === 0 || res.data.status === -1 || res.data.status === -2)) {
+                  wx.showToast({
+                    title: res.data.status === 0 ? '下班打卡成功' : '下班打卡失败',
+                    icon: res.data.status === 0 ? 'success' : 'none',
+                  });
+                  that.fetchAttendanceRecords(); // 刷新考勤记录
+                } else {
+                  wx.showToast({
+                    title: '下班打卡失败',
+                    icon: 'none',
+                  });
+                }
+              },
+              fail: function (err) {
+                console.error('下班打卡失败:', err);
+                wx.showToast({
+                  title: '网络错误，请重试',
+                  icon: 'none',
+                });
+              },
             });
-            that.fetchAttendanceRecords(); // 刷新考勤记录
-          } else {
-            wx.showToast({
-              title: '下班打卡失败',
-              icon: 'none',
-            });
-          }
+          });
         },
-        fail: function (err) {
-          console.error('下班打卡失败:', err);
+        fail: (err) => {
+          console.error('获取位置失败：', err);
           wx.showToast({
-            title: '网络错误，请重试',
+            title: '获取位置失败，请检查权限',
             icon: 'none',
           });
+        },
+      });
+    },
+  
+    // 逆地理编码：将经纬度转换为城市信息
+    reverseGeocode(latitude, longitude, callback) {
+      wx.request({
+        url: 'https://restapi.amap.com/v3/geocode/regeo', // 高德地图逆地理编码接口
+        method: 'GET',
+        data: {
+          key: '你的高德地图API Key', // 替换为你的高德地图 API Key
+          location: `${longitude},${latitude}`,
+          extensions: 'base', // 只返回基本地址信息
+        },
+        success: (res) => {
+          if (res.data.status === '1') {
+            const city = res.data.regeocode.addressComponent.city; // 获取城市信息
+            callback(city); // 返回城市信息
+          } else {
+            console.error('逆地理编码失败：', res.data);
+            callback('未知城市');
+          }
+        },
+        fail: (err) => {
+          console.error('逆地理编码请求失败：', err);
+          callback('未知城市');
         },
       });
     },
@@ -149,6 +225,7 @@ Page({
             that.setData({
               attendanceRecords: records,
             });
+  
             // 初始化时过滤今天的记录
             that.filterRecordsByDate(that.data.selectedDate);
           } else {
@@ -168,7 +245,16 @@ Page({
       });
     },
   
-
+    // 日期选择器事件
+    onDateChange(e) {
+      const selectedDate = e.detail.value; // 获取选择的日期
+      this.setData({
+        selectedDate: selectedDate,
+      });
+  
+      // 根据选择的日期过滤考勤记录
+      this.filterRecordsByDate(selectedDate);
+    },
   
     // 根据日期过滤考勤记录
     filterRecordsByDate(date) {
@@ -180,7 +266,6 @@ Page({
       const filteredRecords = attendanceRecords.filter((record) => {
         // 将记录日期格式化为 YYYY-MM-DD
         const recordDate = this.formatDate(record.attendanceDate);
-        console.log('recordDate:', recordDate, 'formattedDate:', formattedDate);
         return recordDate === formattedDate;
       });
   

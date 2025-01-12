@@ -4,6 +4,7 @@ Page({
       pendingLeaveApprovals: [], // 请假审批
       pendingReimbursement: [], // 报销
       pendingMeetings: [], // 会议
+      timer: null, // 定时器
     },
   
     onLoad() {
@@ -11,6 +12,57 @@ Page({
       this.getLeaveApprovals();
       this.getReimbursements();
       this.getMeetings();
+  
+      // 启动定时器，每隔10分钟检查一次
+      this.setData({
+        timer: setInterval(() => {
+          this.checkDeadlines();
+        }, 10 * 60 * 1000) // 10分钟
+      });
+    },
+  
+    onUnload() {
+      // 页面卸载时清除定时器
+      if (this.data.timer) {
+        clearInterval(this.data.timer);
+      }
+    },
+  
+    // 检查即将截止的事项
+    checkDeadlines() {
+      const now = new Date().getTime();
+      const oneHourLater = now + 60 * 60 * 1000; // 1小时后
+  
+      // 检查待办事项
+      this.data.pendingTodos.forEach(todo => {
+        const todoDeadline = new Date(todo.todo_ddl).getTime(); // 使用 todo_ddl 作为截止日期
+        if (todoDeadline <= oneHourLater && todoDeadline > now) {
+          this.showReminder(`待办事项 "${todo.todo_title}" 即将截止`); // 使用 todo_title 作为事项名称
+        }
+      });
+  
+      // 检查请假审批
+      this.data.pendingLeaveApprovals.forEach(leave => {
+        const leaveDeadline = new Date(leave.end_date).getTime(); // 使用 end_date 作为截止日期
+        if (leaveDeadline <= oneHourLater && leaveDeadline > now) {
+          this.showReminder(`请假审批 "${leave.title}" 即将截止`);
+        }
+      });
+    },
+  
+    // 显示提醒弹窗
+    showReminder(message) {
+      wx.showModal({
+        title: '即将截止提醒',
+        content: message,
+        showCancel: false,
+        confirmText: '知道了',
+        success(res) {
+          if (res.confirm) {
+            console.log('用户点击了知道了');
+          }
+        },
+      });
     },
   
     // 获取待办事项
@@ -27,12 +79,8 @@ Page({
             success(res) {
               if (res.statusCode === 200 && res.data.status === 0) {
                 const todos = res.data.data;
-                // 检查标志位
-                const showUncompleted = wx.getStorageSync('showUncompleted') === '1';
                 that.setData({
-                  pendingTodos: showUncompleted
-                    ? todos.filter(todo => todo.todo_fin === '未完成') // 过滤未完成
-                    : todos, // 显示全部
+                  pendingTodos: todos.filter(todo => todo.todo_fin === '未完成'),
                 });
               }
             },
@@ -61,12 +109,8 @@ Page({
             success(res) {
               if (res.statusCode === 200 && res.data.status === 0) {
                 const leaveApprovals = res.data.data;
-                // 检查标志位
-                const showPendingLeave = wx.getStorageSync('showPendingLeave') === '1';
                 that.setData({
-                  pendingLeaveApprovals: showPendingLeave
-                    ? leaveApprovals.filter(leave => leave.leave_status === '待审批') // 过滤待审批
-                    : leaveApprovals, // 显示全部
+                  pendingLeaveApprovals: leaveApprovals.filter(leave => leave.leave_status === '待审批'),
                 });
               }
             },
@@ -100,14 +144,10 @@ Page({
             success(res) {
               if (res.statusCode === 200 && res.data.status === 0) {
                 const reimbursements = res.data.data;
-                // 检查标志位
-                const showPendingReimbursement = wx.getStorageSync('showPendingReimbursement') === '1';
                 that.setData({
-                  pendingReimbursement: showPendingReimbursement
-                    ? reimbursements.filter(
-                        reimbursement => reimbursement.status === '未审核' || reimbursement.status === '未通过'
-                      ) // 过滤未审核或未通过
-                    : reimbursements, // 显示全部
+                  pendingReimbursement: reimbursements.filter(
+                    reimbursement => reimbursement.status === '未审核' || reimbursement.status === '未通过'
+                  ),
                 });
               }
             },
@@ -136,12 +176,8 @@ Page({
             success(res) {
               if (res.statusCode === 200 && res.data.status === 0) {
                 const meetings = res.data.data;
-                // 检查标志位
-                const showPendingMeetings = wx.getStorageSync('showPendingMeetings') === '1';
                 that.setData({
-                  pendingMeetings: showPendingMeetings
-                    ? meetings.filter(meeting => meeting.mtin_fin === '未完成') // 过滤未完成
-                    : meetings, // 显示全部
+                  pendingMeetings: meetings.filter(meeting => meeting.mtin_fin === '未完成'),
                 });
               }
             },
@@ -158,7 +194,6 @@ Page({
   
     // 跳转到待办事项页面
     navigateToTodoList() {
-      // wx.setStorageSync('showUncompleted', '1'); // 设置标志位
       wx.navigateTo({
         url: '/pages/todo/todo?showUncompleted=1',
       });
@@ -166,7 +201,6 @@ Page({
   
     // 跳转到请假审批页面
     navigateToLeaveApproval() {
-      wx.setStorageSync('showPendingLeave', '1'); // 设置标志位
       wx.navigateTo({
         url: '/pages/leave/leave',
       });
@@ -174,7 +208,6 @@ Page({
   
     // 跳转到报销页面
     navigateToReimbursement() {
-      wx.setStorageSync('showPendingReimbursement', '1'); // 设置标志位
       wx.navigateTo({
         url: '/pages/reimbursement/reimbursement',
       });
@@ -182,7 +215,6 @@ Page({
   
     // 跳转到会议页面
     navigateToMeetings() {
-      wx.setStorageSync('showPendingMeetings', '1'); // 设置标志位
       wx.navigateTo({
         url: '/pages/meeting/meeting',
       });

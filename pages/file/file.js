@@ -258,6 +258,40 @@ Page({
       wx.stopPullDownRefresh()
     },1000)
   },
+
+  onDownload:function(e){
+    var record = JSON.stringify(e.target.dataset.record);
+    var parsedRecord = JSON.parse(record);
+    console.log(parsedRecord.url)
+    wx.downloadFile({
+      url: parsedRecord.url, // 仅为示例，非真实的接口地址
+      success: function (res) {
+        const filePath = res.tempFilePath;
+        // 下载成功后，可以使用 filePath 展示图片或者保存文件
+        if(parsedRecord.ext === "jpg" || parsedRecord.ext === "png"){
+          wx.previewImage({
+            current: filePath,
+            urls: [filePath]
+          })
+        }
+        
+        wx.saveImageToPhotosAlbum({
+          filePath: filePath,
+          success(res) {
+            wx.showToast({
+              title: '保存成功',
+              icon: 'success',
+              duration: 2000
+            })
+          }
+        })
+      },
+      fail: function (err) {
+        console.error('文件下载失败', err);
+      }
+    })
+    
+  },
   getTodoRecord:function(i=0) {
     let that = this;
     // console.log("执行到getTodoRecord了");

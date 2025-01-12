@@ -48,6 +48,7 @@
 						<text bindtap="onDeleteRecord" data-id="{{item.id}}">删除</text> 
             <text bindtap="onModifyRecord" data-record="{{item}}">修改</text>
             <text bindtap="onInfo" data-record="{{item}}">详情</text>
+            <text bindtap="onDownload" data-record="{{item}}">下载</text>
 					</view>
 				</view>
 			</navigator>
