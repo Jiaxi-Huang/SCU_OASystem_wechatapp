@@ -225,6 +225,7 @@ Page({
             that.setData({
               attendanceRecords: records,
             });
+  
             // 初始化时过滤今天的记录
             that.filterRecordsByDate(that.data.selectedDate);
           } else {
@@ -244,6 +245,17 @@ Page({
       });
     },
   
+    // 日期选择器事件
+    onDateChange(e) {
+      const selectedDate = e.detail.value; // 获取选择的日期
+      this.setData({
+        selectedDate: selectedDate,
+      });
+  
+      // 根据选择的日期过滤考勤记录
+      this.filterRecordsByDate(selectedDate);
+    },
+  
     // 根据日期过滤考勤记录
     filterRecordsByDate(date) {
       const { attendanceRecords } = this.data;
@@ -254,7 +266,6 @@ Page({
       const filteredRecords = attendanceRecords.filter((record) => {
         // 将记录日期格式化为 YYYY-MM-DD
         const recordDate = this.formatDate(record.attendanceDate);
-        console.log('recordDate:', recordDate, 'formattedDate:', formattedDate);
         return recordDate === formattedDate;
       });
   
