@@ -33,9 +33,9 @@
 }
 .service-tags text{
 	padding: 6rpx 16rpx;
-	border: 1rpx solid #f7982a;
+	border: 1rpx solid #4b9cd6;
 	line-height: 1;
-	color: #f7982a;
+	color: #4b9cd6;
 	font-size: 28rpx;
 	border-radius: 4rpx;
 	margin-right: 10rpx;

@@ -19,11 +19,16 @@ Page({
     todo_list:[],
     flitered_list:[],
   },
-  onLoad: function () { //加载数据渲染页面
+  onLoad: function (options) { //加载数据渲染页面
     // this.fetchServiceData();
     this.fetchFilterData();
-    // console.log("getTodoRecord");
-    this.getTodoRecord();
+    if (!options.showUncompleted) {
+      this.getTodoRecord();
+    } else{
+      this.setPrimSort();
+    }
+    
+    
   },
   refresh:function(){ //获取筛选条件
     this.setData({
@@ -90,12 +95,12 @@ Page({
       showfilter: 0,
     })
     const key = dataset.sortid? '未完成':'已完成';
-    console.log(key);
+    // console.log(key);
     let temp_list = [];
     let _this = this;
     _this.data.todo_list.forEach(record => {
       if (record.todo_fin === key) {
-        console.log(record.todo_title + "ok");
+        // console.log(record.todo_title + "ok");
         temp_list.push(record);
       }
     });
@@ -103,31 +108,48 @@ Page({
       flitered_list: temp_list
     })
   },
-  setSubsortIndex:function(e){ //服务类别二级索引
-    const dataset = e.currentTarget.dataset;
-    this.setData({
-      subsortindex:dataset.subsortindex,
-      subsortid:dataset.subsortid,
-    })
-    // console.log('服务类别id：一级--'+this.data.sortid+',二级--'+this.data.subsortid);
-  },
-  setCityIndex:function(e){ //服务城市一级索引
-    const d= this.data;
-    const dataset = e.currentTarget.dataset;
-    this.setData({
-      cityindex:dataset.cityindex,
-      cityid:dataset.cityid,
-      subcityindex: d.cityindex==dataset.cityindex ? d.subcityindex:0
-    })
-    console.log('服务城市id：一级--'+this.data.cityid+',二级--'+this.data.subcityid);
-  },
-  setSubcityIndex:function(e){ //服务城市二级索引
-    const dataset = e.currentTarget.dataset;
-    this.setData({
-      subcityindex:dataset.subcityindex,
-      subcityid:dataset.subcityid,
-    })
-    console.log('服务城市id：一级--'+this.data.cityid+',二级--'+this.data.subcityid);
+
+  setPrimSort:function(){
+    let that = this;
+    console.log("setPrimSort");
+    wx.getStorage({
+      key: 'accessToken', 
+      success: function(res) {
+        const accessToken = res.data;
+        wx.request({
+          url: 'http://localhost:8080/api/todolist/getRec',
+          data:{accessToken: accessToken},
+          method: 'POST',
+          success:function(res) {
+            // console.log("records get!");
+            // 使用 setData 更新 todo_list 并确保图片路径正确
+            that.setData({
+              todo_list: res.data.data.map(item => {
+                  item.url = item.todo_fin === "已完成" ? "/images/radiofill.png" : "/images/radio.png";
+                  return item;
+              }),
+            }, () => {
+              that.setData({
+                flitered_list: that.data.todo_list,
+              }, ()=> {
+                let temp_list = [];
+                that.data.todo_list.forEach(record => {
+                  if (record.todo_fin === '未完成') {
+                    temp_list.push(record);
+                  }
+                });
+                that.setData({
+                  flitered_list: temp_list
+                })
+              })
+            });
+          },
+        })
+      },
+      fail: function(err) {
+        console.error('获取accessToken失败:', err);
+      }
+    });
   },
   hideFilter: function(){ //关闭筛选面板
     this.setData({

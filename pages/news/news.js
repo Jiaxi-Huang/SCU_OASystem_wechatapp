@@ -195,7 +195,7 @@ Page({
     // 跳转到待办事项页面
     navigateToTodoList() {
       wx.navigateTo({
-        url: '/pages/todo/todo',
+        url: '/pages/todo/todo?showUncompleted=1',
       });
     },
   
