@@ -36,14 +36,11 @@
   <!-- 上班打卡位置 -->
   <view class="form-item">
     <text>上班打卡位置</text>
-    <picker
-      mode="selector"
-      range="{{locations}}"
-      range-key="label"
-      bindchange="onInLocationChange"
-    >
-      <view class="picker">{{form.inLocation || '请选择位置'}}</view>
-    </picker>
+    <input
+      value="{{form.inLocation}}"
+      placeholder="请输入上班打卡位置"
+      bindinput="onInLocationInput"
+    />
   </view>
 
   <!-- 下班打卡时间 -->
@@ -61,14 +58,11 @@
   <!-- 下班打卡位置 -->
   <view class="form-item">
     <text>下班打卡位置</text>
-    <picker
-      mode="selector"
-      range="{{locations}}"
-      range-key="label"
-      bindchange="onOutLocationChange"
-    >
-      <view class="picker">{{form.outLocation || '请选择位置'}}</view>
-    </picker>
+    <input
+      value="{{form.outLocation}}"
+      placeholder="请输入下班打卡位置"
+      bindinput="onOutLocationInput"
+    />
   </view>
 
   <!-- 提交按钮 -->
