@@ -27,12 +27,8 @@ Page({
             success(res) {
               if (res.statusCode === 200 && res.data.status === 0) {
                 const todos = res.data.data;
-                // 检查标志位
-                const showUncompleted = wx.getStorageSync('showUncompleted') === '1';
                 that.setData({
-                  pendingTodos: showUncompleted
-                    ? todos.filter(todo => todo.todo_fin === '未完成') // 过滤未完成
-                    : todos, // 显示全部
+                  pendingTodos: todos.filter(todo => todo.todo_fin === '未完成'),
                 });
               }
             },
@@ -61,12 +57,8 @@ Page({
             success(res) {
               if (res.statusCode === 200 && res.data.status === 0) {
                 const leaveApprovals = res.data.data;
-                // 检查标志位
-                const showPendingLeave = wx.getStorageSync('showPendingLeave') === '1';
                 that.setData({
-                  pendingLeaveApprovals: showPendingLeave
-                    ? leaveApprovals.filter(leave => leave.leave_status === '待审批') // 过滤待审批
-                    : leaveApprovals, // 显示全部
+                  pendingLeaveApprovals: leaveApprovals.filter(leave => leave.leave_status === '待审批'),
                 });
               }
             },
@@ -100,14 +92,10 @@ Page({
             success(res) {
               if (res.statusCode === 200 && res.data.status === 0) {
                 const reimbursements = res.data.data;
-                // 检查标志位
-                const showPendingReimbursement = wx.getStorageSync('showPendingReimbursement') === '1';
                 that.setData({
-                  pendingReimbursement: showPendingReimbursement
-                    ? reimbursements.filter(
-                        reimbursement => reimbursement.status === '未审核' || reimbursement.status === '未通过'
-                      ) // 过滤未审核或未通过
-                    : reimbursements, // 显示全部
+                  pendingReimbursement: reimbursements.filter(
+                    reimbursement => reimbursement.status === '未审核' || reimbursement.status === '未通过'
+                  ),
                 });
               }
             },
@@ -136,12 +124,8 @@ Page({
             success(res) {
               if (res.statusCode === 200 && res.data.status === 0) {
                 const meetings = res.data.data;
-                // 检查标志位
-                const showPendingMeetings = wx.getStorageSync('showPendingMeetings') === '1';
                 that.setData({
-                  pendingMeetings: showPendingMeetings
-                    ? meetings.filter(meeting => meeting.mtin_fin === '未完成') // 过滤未完成
-                    : meetings, // 显示全部
+                  pendingMeetings: meetings.filter(meeting => meeting.mtin_fin === '未完成'),
                 });
               }
             },
@@ -158,7 +142,6 @@ Page({
   
     // 跳转到待办事项页面
     navigateToTodoList() {
-      wx.setStorageSync('showUncompleted', '1'); // 设置标志位
       wx.navigateTo({
         url: '/pages/todo/todo',
       });
@@ -166,7 +149,6 @@ Page({
   
     // 跳转到请假审批页面
     navigateToLeaveApproval() {
-      wx.setStorageSync('showPendingLeave', '1'); // 设置标志位
       wx.navigateTo({
         url: '/pages/leave/leave',
       });
@@ -174,7 +156,6 @@ Page({
   
     // 跳转到报销页面
     navigateToReimbursement() {
-      wx.setStorageSync('showPendingReimbursement', '1'); // 设置标志位
       wx.navigateTo({
         url: '/pages/reimbursement/reimbursement',
       });
@@ -182,7 +163,6 @@ Page({
   
     // 跳转到会议页面
     navigateToMeetings() {
-      wx.setStorageSync('showPendingMeetings', '1'); // 设置标志位
       wx.navigateTo({
         url: '/pages/meeting/meeting',
       });
