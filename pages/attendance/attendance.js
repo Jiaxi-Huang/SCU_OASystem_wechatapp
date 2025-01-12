@@ -3,6 +3,7 @@ Page({
       attendanceRecords: [], // 所有考勤记录
       filteredRecords: [], // 过滤后的考勤记录
       selectedDate: '', // 选择的日期
+      isAdminOrManager: false, // 是否是管理员或经理
     },
   
     onLoad() {
@@ -11,18 +12,124 @@ Page({
       this.setData({
         selectedDate: today,
       });
+  
+      // 获取用户角色信息
+      this.fetchUserRole();
+  
       // 加载考勤记录
       this.fetchAttendanceRecords();
     },
   
-    // 监听日期选择
-    onDateChange(e) {
-      const selectedDate = e.detail.value;
-      this.setData({
-        selectedDate: selectedDate,
+    // 获取用户角色信息
+    fetchUserRole() {
+      const that = this;
+      const accessToken = wx.getStorageSync('accessToken');
+      wx.request({
+        url: 'http://localhost:8080/api/auth/user/userInfo',
+        method: 'POST',
+        header: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        data: {
+          accessToken: accessToken,
+        },
+        success: function (res) {
+          console.log('用户信息接口返回:', res.data);
+          if (res.statusCode === 200 && res.data && res.data.status === 0) {
+            const roleName = res.data.data.roleName;
+            that.setData({
+              isAdminOrManager: roleName === 'admin' || roleName === 'manager',
+            });
+          } else {
+            wx.showToast({
+              title: '获取用户信息失败',
+              icon: 'none',
+            });
+          }
+        },
+        fail: function (err) {
+          console.error('获取用户信息失败:', err);
+          wx.showToast({
+            title: '网络错误，请重试',
+            icon: 'none',
+          });
+        },
       });
-      // 过滤考勤记录
-      this.filterRecordsByDate(selectedDate);
+    },
+  
+    // 上班打卡
+    onPunchIn() {
+      const that = this;
+      const accessToken = wx.getStorageSync('accessToken');
+  
+      // 调用上班打卡接口
+      wx.request({
+        url: `http://localhost:8080/api/attendance/checkInAttendance?accessToken=${accessToken}`,
+        method: 'POST',
+        header: {
+          'Content-Type': 'application/json',
+        },
+        success: function (res) {
+          console.log('上班打卡接口返回:', res.data);
+          if (res.statusCode === 200 && res.data && (res.data.status === 0 || res.data.status === -1)) {
+            wx.showToast({
+              title: res.data.status === 0 ? '上班打卡成功' : '上班打卡失败',
+              icon: res.data.status === 0 ? 'success' : 'none',
+            });
+            that.fetchAttendanceRecords(); // 刷新考勤记录
+          } else {
+            wx.showToast({
+              title: '上班打卡失败',
+              icon: 'none',
+            });
+          }
+        },
+        fail: function (err) {
+          console.error('上班打卡失败:', err);
+          wx.showToast({
+            title: '网络错误，请重试',
+            icon: 'none',
+          });
+        },
+      });
+    },
+  
+    // 下班打卡
+    onPunchOut() {
+      const that = this;
+      const accessToken = wx.getStorageSync('accessToken');
+  
+      // 调用下班打卡接口
+      wx.request({
+        url: `http://localhost:8080/api/attendance/checkOutAttendance?accessToken=${accessToken}`,
+        method: 'POST',
+        header: {
+          'Content-Type': 'application/json',
+        },
+        success: function (res) {
+          console.log('下班打卡接口返回:', res.data);
+          if (res.statusCode === 200 && res.data && (res.data.status === 0 || res.data.status === -1 || res.data.status === -2)) {
+            wx.showToast({
+              title: res.data.status === 0 ? '下班打卡成功' : '下班打卡失败',
+              icon: res.data.status === 0 ? 'success' : 'none',
+            });
+            that.fetchAttendanceRecords(); // 刷新考勤记录
+          } else {
+            wx.showToast({
+              title: '下班打卡失败',
+              icon: 'none',
+            });
+          }
+        },
+        fail: function (err) {
+          console.error('下班打卡失败:', err);
+          wx.showToast({
+            title: '网络错误，请重试',
+            icon: 'none',
+          });
+        },
+      });
     },
   
     // 获取考勤记录
@@ -33,12 +140,12 @@ Page({
         url: `http://localhost:8080/api/attendance/personalAttendance?accessToken=${accessToken}`,
         method: 'POST',
         header: {
-          'Content-Type': 'application/json', // 设置请求头
+          'Content-Type': 'application/json',
         },
         success: function (res) {
-          console.log('后端返回:', res.data); // 打印后端返回的数据
+          console.log('后端返回:', res.data);
           if (res.statusCode === 200 && res.data && res.data.status === 0) {
-            const records = res.data.data || []; // 确保 records 是数组
+            const records = res.data.data || [];
             that.setData({
               attendanceRecords: records,
             });
@@ -52,7 +159,7 @@ Page({
           }
         },
         fail: function (err) {
-          console.error('请求失败:', err); // 打印完整的错误信息
+          console.error('请求失败:', err);
           wx.showToast({
             title: '网络错误，请重试',
             icon: 'none',
@@ -60,6 +167,7 @@ Page({
         },
       });
     },
+  
   
     // 根据日期过滤考勤记录
     filterRecordsByDate(date) {
@@ -71,11 +179,11 @@ Page({
       const filteredRecords = attendanceRecords.filter((record) => {
         // 将记录日期格式化为 YYYY-MM-DD
         const recordDate = this.formatDate(record.attendanceDate);
-        console.log('recordDate:', recordDate, 'formattedDate:', formattedDate); // 调试输出
+        console.log('recordDate:', recordDate, 'formattedDate:', formattedDate);
         return recordDate === formattedDate;
       });
   
-      console.log('过滤后的记录:', filteredRecords); // 打印过滤后的记录
+      console.log('过滤后的记录:', filteredRecords);
       this.setData({
         filteredRecords: filteredRecords,
       });
@@ -105,18 +213,18 @@ Page({
     // 新增考勤记录
     onAddRecord() {
       wx.navigateTo({
-        url: '/pages/attendance/attendance_add', // 跳转到新增页面
+        url: '/pages/attendance/attendance_add',
       });
     },
   
     // 修改考勤记录
     onModifyRecord(e) {
-        const record = e.currentTarget.dataset.record; // 获取完整的考勤记录数据
-        console.log('传递的数据:', record); // 打印传递的数据
-        wx.navigateTo({
-          url: `/pages/attendance/attendance_modify?record=${JSON.stringify(record)}`, // 将记录数据转为字符串传递
-        });
-      },
+      const record = e.currentTarget.dataset.record;
+      console.log('传递的数据:', record);
+      wx.navigateTo({
+        url: `/pages/attendance/attendance_modify?record=${JSON.stringify(record)}`,
+      });
+    },
   
     // 删除考勤记录
     onDeleteRecord(e) {
@@ -131,7 +239,7 @@ Page({
               url: `http://localhost:8080/api/attendance/delAttendance?id=${recordId}`,
               method: 'POST',
               header: {
-                'Content-Type': 'application/json', // 设置请求头
+                'Content-Type': 'application/json',
               },
               success(res) {
                 if (res.statusCode === 200 && res.data.status === 0) {
@@ -147,7 +255,7 @@ Page({
                 }
               },
               fail(err) {
-                console.error('删除考勤记录失败:', err); // 打印完整的错误信息
+                console.error('删除考勤记录失败:', err);
                 wx.showToast({
                   title: '删除失败',
                   icon: 'none',

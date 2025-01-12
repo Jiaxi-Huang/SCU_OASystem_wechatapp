@@ -6,8 +6,14 @@
     </picker>
   </view>
 
-  <!-- 新增记录按钮 -->
-  <button bindtap="onAddRecord" class="add-button">新增考勤记录</button>
+  <!-- 打卡按钮 -->
+  <view class="punch-buttons">
+    <button bindtap="onPunchIn" class="punch-button">上班打卡</button>
+    <button bindtap="onPunchOut" class="punch-button">下班打卡</button>
+  </view>
+
+  <!-- 新增记录按钮（仅管理员或经理可见） -->
+  <button wx:if="{{isAdminOrManager}}" bindtap="onAddRecord" class="add-button">新增考勤记录</button>
 
   <!-- 考勤记录列表 -->
   <view class="records">
@@ -18,7 +24,8 @@
         <text>下班时间: {{item.checkOut || '未打卡'}}</text>
         <text>状态: {{item.status}}</text>
       </view>
-      <view class="record-actions">
+      <!-- 操作按钮（仅管理员或经理可见） -->
+      <view wx:if="{{isAdminOrManager}}" class="record-actions">
         <button bindtap="onModifyRecord" data-record="{{item}}" class="modify-button">修改</button>
         <button bindtap="onDeleteRecord" data-record="{{item}}" class="delete-button">删除</button>
       </view>
