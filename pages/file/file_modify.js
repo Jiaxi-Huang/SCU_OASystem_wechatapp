@@ -9,6 +9,7 @@ Page({
     hasfinancing: false,  //是否已融资
     isorg: false,  //是否是机构
     record: {},
+    folderId:0
   },
   onLoad: function () {
     var record;
@@ -16,9 +17,11 @@ Page({
       try {
         record = JSON.parse(this.options.record);
         this.setData({
-          record: record
+          record: record,
+          folderId:this.options.folderId
         }, () => {
           console.log('modify的 record:', this.data.record); 
+          console.log('modify的 record:', this.data.folderId); 
         });
       } catch (error) {
         console.error('modify JSON 解析失败:', error);
@@ -71,8 +74,11 @@ Page({
   applySubmit:function(){
     let that = this;
     let record = that.data.record;
+    let folderId = that.data.folderId;
     delete record.imageUrl;
     console.log("上传的todo record");
+    
+    console.log(folderId);
     console.log(record);
     console.log(record.id);
     wx.showModal({
@@ -91,8 +97,9 @@ Page({
               fileName:record.fileName
             },
             success:function(res) {
+              let pages = getCurrentPages(); //获取小程序页面栈
+              pages[pages.length -2].goBackUpdateInfo(folderId); //使用上个页面的实例对象的方法
               console.log(res.data)
-              
             },
             fail:function(res) {
               console.log("Modify失败");
@@ -109,7 +116,7 @@ Page({
             },
             success:function(res) {
               let pages = getCurrentPages(); //获取小程序页面栈
-              pages[pages.length -2].goBackUpdateInfo(); //使用上个页面的实例对象的方法
+              pages[pages.length -2].goBackUpdateInfo(folderId); //使用上个页面的实例对象的方法
               wx.navigateBack();
               if(res.data.status===-1){
                 console.log("status1")
