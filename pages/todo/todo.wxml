@@ -5,7 +5,7 @@
 			<input type="text" maxlength="12" placeholder="请输入标题关键查询" bindinput="inputSearch"></input>
 			<button class="search-btn" bindtap="submitSearch" wx:if="{{showsearch}}">搜索</button>
 		</view>
-		<button class="search-extra-btn" bindtap='refresh'>刷新</button>
+		<button class="search-extra-btn" bindtap='refresh'>全部</button>
 	</view>
 
 	<view class="filter-flex">
@@ -21,7 +21,9 @@
 		</view>
 		<view class="filter-shadow" wx:if="{{showfilter}}" bindtap="hideFilter"></view>
 	</view>
-
+  <view class="btn-submit">
+		<button class="btn-block btn-orange" bindtap="onAddRecord">新增待办事项</button>
+	</view>
 
 	<scroll-view class="container-body" scroll-y="true" scroll-top="{{scrolltop}}" bindscroll="scrollHandle" lower-threshold="50" bindscrolltolower="scrollLoading" >
 		<view class="service-list">
@@ -46,8 +48,5 @@
 		</view>
 		<view class="gototop {{scrolltop>200?'active':''}}" bindtap="goToTop"></view>
 	</scroll-view>
-  <view class="btn-submit">
-		<button class="btn-block btn-orange" bindtap="onAddRecord">新增待办事项</button>
-	</view>
 </view>
 

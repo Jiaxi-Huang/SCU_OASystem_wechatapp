@@ -158,9 +158,9 @@ Page({
   
     // 跳转到待办事项页面
     navigateToTodoList() {
-      wx.setStorageSync('showUncompleted', '1'); // 设置标志位
+      // wx.setStorageSync('showUncompleted', '1'); // 设置标志位
       wx.navigateTo({
-        url: '/pages/todo/todo',
+        url: '/pages/todo/todo?showUncompleted=1',
       });
     },
   

@@ -148,15 +148,26 @@ Page({
   },
   // 查询按钮点击事件
   onQueryClick() {
-    const mtin_id = Number(this.data.inputValue.trim());
-    if (!mtin_id && mtin_id != 0) {
+    const mtin_id = this.data.inputValue.trim();
+    
+    if (mtin_id === '') {  // Check if input is empty
       wx.showToast({
         title: '请输入会议ID',
         icon: 'error',
-        duration: 2000,
-      })
+        duration: 1000,
+      });
       return;
     }
+    const mtin_id_number = Number(mtin_id);  
+    if (isNaN(mtin_id_number)) {  // Check if it's a valid number
+      wx.showToast({
+        title: '会议ID是数字',
+        icon: 'error',
+        duration: 1000,
+      });
+      return;
+    }
+
     let all = this.data.meeting_list;
     for (const record of all) {
       if (record.mtin_id == mtin_id) {
