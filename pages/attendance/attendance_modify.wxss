@@ -18,7 +18,7 @@
 
 /* 输入框样式 */
 .form-item input {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -28,7 +28,7 @@
 
 /* 选择器样式 */
 .picker {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     border: 1px solid #ddd; /* 添加边框 */
     border-radius: 5px;
