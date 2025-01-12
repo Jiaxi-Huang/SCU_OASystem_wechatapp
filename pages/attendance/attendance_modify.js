@@ -24,41 +24,23 @@ Page({
     },
   
     onLoad(options) {
-      // 从页面参数中获取考勤记录ID
-      const recordId = options.id;
-      if (recordId) {
-        // 模拟从父页面或接口获取数据
-        this.fetchAttendanceRecord(recordId);
+      console.log('接收到的参数:', options); // 打印接收到的参数
+      if (options.record) {
+        const record = JSON.parse(options.record); // 将字符串解析为对象
+        console.log('解析后的数据:', record); // 打印解析后的数据
+        this.setData({
+          form: {
+            userName: record.userName,
+            attendanceDate: record.attendanceDate,
+            checkIn: record.checkIn,
+            checkOut: record.checkOut,
+            inLocation: record.inLocation,
+            outLocation: record.outLocation,
+            userId: record.userId,
+            id: record.id,
+          },
+        });
       }
-    },
-  
-    // 模拟获取考勤记录详情
-    fetchAttendanceRecord(recordId) {
-      // 这里可以替换为实际的后端接口调用
-      const mockData = {
-        id: recordId,
-        userName: '张三',
-        attendanceDate: '2024-01-01',
-        checkIn: '09:00:00',
-        checkOut: '18:00:00',
-        inLocation: '成都',
-        outLocation: '成都',
-        userId: '123',
-      };
-  
-      // 将数据填充到表单中
-      this.setData({
-        form: {
-          userName: mockData.userName,
-          attendanceDate: mockData.attendanceDate,
-          checkIn: mockData.checkIn,
-          checkOut: mockData.checkOut,
-          inLocation: mockData.inLocation,
-          outLocation: mockData.outLocation,
-          userId: mockData.userId,
-          id: mockData.id,
-        },
-      });
     },
   
     // 监听考勤日期选择
@@ -85,18 +67,18 @@ Page({
     // 监听上班打卡位置选择
     onInLocationChange(e) {
       const index = e.detail.value; // 获取选中的索引
-      const selectedLocation = this.data.locations[index].label; // 获取对应的 label
+      const selectedLocation = this.data.locations[index].value; // 获取对应的 value
       this.setData({
-        'form.inLocation': selectedLocation, // 保存 label
+        'form.inLocation': selectedLocation, // 保存 value
       });
     },
   
     // 监听下班打卡位置选择
     onOutLocationChange(e) {
       const index = e.detail.value; // 获取选中的索引
-      const selectedLocation = this.data.locations[index].label; // 获取对应的 label
+      const selectedLocation = this.data.locations[index].value; // 获取对应的 value
       this.setData({
-        'form.outLocation': selectedLocation, // 保存 label
+        'form.outLocation': selectedLocation, // 保存 value
       });
     },
   
@@ -141,6 +123,16 @@ Page({
               title: '修改成功',
               icon: 'success',
             });
+  
+            // 获取上一页的实例
+            const pages = getCurrentPages();
+            const prevPage = pages[pages.length - 2]; // 上一页
+  
+            // 调用上一页的方法重新加载数据
+            if (prevPage && prevPage.fetchAttendanceRecords) {
+              prevPage.fetchAttendanceRecords();
+            }
+  
             wx.navigateBack(); // 返回上一页
           } else {
             wx.showToast({

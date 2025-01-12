@@ -71,6 +71,7 @@ Page({
       const filteredRecords = attendanceRecords.filter((record) => {
         // 将记录日期格式化为 YYYY-MM-DD
         const recordDate = this.formatDate(record.attendanceDate);
+        console.log('recordDate:', recordDate, 'formattedDate:', formattedDate); // 调试输出
         return recordDate === formattedDate;
       });
   
@@ -86,6 +87,12 @@ Page({
   
       // 如果日期是时间戳，先转换为日期对象
       const dateObj = new Date(date);
+  
+      // 如果 dateObj 是无效的日期对象，直接返回空字符串
+      if (isNaN(dateObj.getTime())) {
+        console.error('Invalid date:', date);
+        return '';
+      }
   
       // 格式化为 YYYY-MM-DD
       const year = dateObj.getFullYear();
@@ -104,11 +111,12 @@ Page({
   
     // 修改考勤记录
     onModifyRecord(e) {
-      const recordId = e.currentTarget.dataset.record.id;
-      wx.navigateTo({
-        url: `/pages/attendance/attendance_modify?id=${recordId}`, // 跳转到修改页面，并传递记录ID
-      });
-    },
+        const record = e.currentTarget.dataset.record; // 获取完整的考勤记录数据
+        console.log('传递的数据:', record); // 打印传递的数据
+        wx.navigateTo({
+          url: `/pages/attendance/attendance_modify?record=${JSON.stringify(record)}`, // 将记录数据转为字符串传递
+        });
+      },
   
     // 删除考勤记录
     onDeleteRecord(e) {

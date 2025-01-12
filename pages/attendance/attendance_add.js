@@ -108,6 +108,16 @@ Page({
               title: '添加成功',
               icon: 'success',
             });
+  
+            // 获取上一页的实例
+            const pages = getCurrentPages();
+            const prevPage = pages[pages.length - 2]; // 上一页
+  
+            // 调用上一页的方法重新加载数据
+            if (prevPage && prevPage.fetchAttendanceRecords) {
+              prevPage.fetchAttendanceRecords();
+            }
+  
             wx.navigateBack(); // 返回上一页
           } else {
             wx.showToast({
