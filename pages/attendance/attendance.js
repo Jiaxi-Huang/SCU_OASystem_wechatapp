@@ -59,93 +59,177 @@ Page({
         });
     },
 
-    // 上班打卡
-    onPunchIn() {
-        const that = this;
-        const accessToken = wx.getStorageSync('accessToken');
+   // 上班打卡
+onPunchIn() {
+    const that = this;
+    const accessToken = wx.getStorageSync('accessToken');
 
-        // 直接使用默认地址“成都”
-        const location = '成都';
+    // 获取用户的地理位置
+    wx.getLocation({
+        type: 'wgs84', // 返回GPS坐标
+        success: function (res) {
+            const latitude = res.latitude;
+            const longitude = res.longitude;
 
-        // 调用上班打卡接口
-        wx.request({
-            url: 'http://localhost:8080/api/attendance/checkInAttendance',
-            method: 'POST',
-            header: {
-                'Content-Type': 'application/json',
-            },
-            data: {
-                accessToken: accessToken, // 将 accessToken 放到请求体中
-                location: location, // 直接传递默认地址
-            },
-            success: function (res) {
-                console.log('上班打卡接口返回:', res.data);
-                if (res.statusCode === 200 && res.data && (res.data.status === 0 || res.data.status === -1)) {
+            // 调用高德地图逆地理编码 API
+            wx.request({
+                url: 'https://restapi.amap.com/v3/geocode/regeo',
+                method: 'GET',
+                data: {
+                    key: 'd5ed3f41fddcf9cb48c562db584fb11a', // 你的高德地图API密钥
+                    location: `${longitude},${latitude}`, // 经纬度坐标
+                    extensions: 'base', // 只返回基本地址信息
+                },
+                success: function (res) {
+                    if (res.statusCode === 200 && res.data && res.data.status === '1') {
+                        const city = res.data.regeocode.addressComponent.city; // 获取城市名称
+                        console.log('获取到的城市名称:', city);
+
+                        // 调用上班打卡接口
+                        wx.request({
+                            url: 'http://localhost:8080/api/attendance/checkInAttendance',
+                            method: 'POST',
+                            header: {
+                                'Content-Type': 'application/json',
+                            },
+                            data: {
+                                accessToken: accessToken,
+                                inLocation: city, // 传递城市名称
+                            },
+                            success: function (res) {
+                                console.log('上班打卡接口返回:', res.data);
+                                if (res.statusCode === 200 && res.data && (res.data.status === 0 || res.data.status === -1)) {
+                                    wx.showToast({
+                                        title: res.data.status === 0 ? '上班打卡成功' : '上班打卡失败',
+                                        icon: res.data.status === 0 ? 'success' : 'none',
+                                    });
+                                    that.fetchAttendanceRecords(); // 刷新考勤记录
+                                } else {
+                                    wx.showToast({
+                                        title: '上班打卡失败',
+                                        icon: 'none',
+                                    });
+                                }
+                            },
+                            fail: function (err) {
+                                console.error('上班打卡失败:', err);
+                                wx.showToast({
+                                    title: '网络错误，请重试',
+                                    icon: 'none',
+                                });
+                            },
+                        });
+                    } else {
+                        wx.showToast({
+                            title: '获取城市名称失败',
+                            icon: 'none',
+                        });
+                    }
+                },
+                fail: function (err) {
+                    console.error('调用逆地理编码API失败:', err);
                     wx.showToast({
-                        title: res.data.status === 0 ? '上班打卡成功' : '上班打卡失败',
-                        icon: res.data.status === 0 ? 'success' : 'none',
-                    });
-                    that.fetchAttendanceRecords(); // 刷新考勤记录
-                } else {
-                    wx.showToast({
-                        title: '上班打卡失败',
+                        title: '获取城市名称失败，请重试',
                         icon: 'none',
                     });
-                }
-            },
-            fail: function (err) {
-                console.error('上班打卡失败:', err);
-                wx.showToast({
-                    title: '网络错误，请重试',
-                    icon: 'none',
-                });
-            },
-        });
-    },
+                },
+            });
+        },
+        fail: function (err) {
+            console.error('获取地理位置失败:', err);
+            wx.showToast({
+                title: '获取地理位置失败，请重试',
+                icon: 'none',
+            });
+        },
+    });
+},
 
-    // 下班打卡
-    onPunchOut() {
-        const that = this;
-        const accessToken = wx.getStorageSync('accessToken');
+// 下班打卡
+onPunchOut() {
+    const that = this;
+    const accessToken = wx.getStorageSync('accessToken');
 
-        // 直接使用默认地址“成都”
-        const location = '成都';
+    // 获取用户的地理位置
+    wx.getLocation({
+        type: 'wgs84', // 返回GPS坐标
+        success: function (res) {
+            const latitude = res.latitude;
+            const longitude = res.longitude;
 
-        // 调用下班打卡接口
-        wx.request({
-            url: 'http://localhost:8080/api/attendance/checkOutAttendance',
-            method: 'POST',
-            header: {
-                'Content-Type': 'application/json',
-            },
-            data: {
-                accessToken: accessToken, // 将 accessToken 放到请求体中
-                location: location, // 直接传递默认地址
-            },
-            success: function (res) {
-                console.log('下班打卡接口返回:', res.data);
-                if (res.statusCode === 200 && res.data && (res.data.status === 0 || res.data.status === -1 || res.data.status === -2)) {
+            // 调用高德地图逆地理编码 API
+            wx.request({
+                url: 'https://restapi.amap.com/v3/geocode/regeo',
+                method: 'GET',
+                data: {
+                    key: 'd5ed3f41fddcf9cb48c562db584fb11a', // 你的高德地图API密钥
+                    location: `${longitude},${latitude}`, // 经纬度坐标
+                    extensions: 'base', // 只返回基本地址信息
+                },
+                success: function (res) {
+                    if (res.statusCode === 200 && res.data && res.data.status === '1') {
+                        const city = res.data.regeocode.addressComponent.city; // 获取城市名称
+                        console.log('获取到的城市名称:', city);
+
+                        // 调用下班打卡接口
+                        wx.request({
+                            url: 'http://localhost:8080/api/attendance/checkOutAttendance',
+                            method: 'POST',
+                            header: {
+                                'Content-Type': 'application/json',
+                            },
+                            data: {
+                                accessToken: accessToken,
+                                outLocation: city, // 传递城市名称
+                            },
+                            success: function (res) {
+                                console.log('下班打卡接口返回:', res.data);
+                                if (res.statusCode === 200 && res.data && (res.data.status === 0 || res.data.status === -1 || res.data.status === -2)) {
+                                    wx.showToast({
+                                        title: res.data.status === 0 ? '下班打卡成功' : '下班打卡失败',
+                                        icon: res.data.status === 0 ? 'success' : 'none',
+                                    });
+                                    that.fetchAttendanceRecords(); // 刷新考勤记录
+                                } else {
+                                    wx.showToast({
+                                        title: '下班打卡失败',
+                                        icon: 'none',
+                                    });
+                                }
+                            },
+                            fail: function (err) {
+                                console.error('下班打卡失败:', err);
+                                wx.showToast({
+                                    title: '网络错误，请重试',
+                                    icon: 'none',
+                                });
+                            },
+                        });
+                    } else {
+                        wx.showToast({
+                            title: '获取城市名称失败',
+                            icon: 'none',
+                        });
+                    }
+                },
+                fail: function (err) {
+                    console.error('调用逆地理编码API失败:', err);
                     wx.showToast({
-                        title: res.data.status === 0 ? '下班打卡成功' : '下班打卡失败',
-                        icon: res.data.status === 0 ? 'success' : 'none',
-                    });
-                    that.fetchAttendanceRecords(); // 刷新考勤记录
-                } else {
-                    wx.showToast({
-                        title: '下班打卡失败',
+                        title: '获取城市名称失败，请重试',
                         icon: 'none',
                     });
-                }
-            },
-            fail: function (err) {
-                console.error('下班打卡失败:', err);
-                wx.showToast({
-                    title: '网络错误，请重试',
-                    icon: 'none',
-                });
-            },
-        });
-    },
+                },
+            });
+        },
+        fail: function (err) {
+            console.error('获取地理位置失败:', err);
+            wx.showToast({
+                title: '获取地理位置失败，请重试',
+                icon: 'none',
+            });
+        },
+    });
+},
 
     // 获取考勤记录
     fetchAttendanceRecords() {
